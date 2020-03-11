@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel='stylesheet' href='/static/styles/home.css'>
+{% endblock %}
+
+{% block content %}
+<div class="full-span-h container-title title-header">
+	<div class="container-nav container-flex title-header-nav flex-align-center">
+		<div class="full-span-v container-flex flex-align-center">
+			<img src="/static/images/logo-full-white.png" width="200px" height="50px">
+		</div>
+		<ul>
+			<ul>
+				<li class="white nav-item underline">Explore</li>
+				<li class="white nav-item underline">Something</li>
+				<li class="white nav-item btn-glow btn-glow-blue">Login</li>
+			</ul>
+		</ul>
+	</div>
+	<div class="title-header-intro container-flex">
+		<div class="limit-width-m">
+			<div class="white splash">For the<br>ambitious.</div>
+			<p class="white spacing-l space-top-l">Lighthouse Academy is a student-led organization aimed to aid students to achieve academic excellence. Subjects of a wide variety, including courses in programs like IGCSE and IB, can be viewed here. 
+			Join the community today to start learning and boost your academic achievements.</p>
+		</div>
+		<div class="reg-form shadow">
+			<form id="reg" class="container-flex flex-v full-span-v full-span-h reg-container" action="/register" method="POST">
+				<div class="container-flex flex-v reg-entry">
+					<label for="email" class="mono-space reg-label">Email</label>
+					<input type="text" id="email" name="email" class="reg-input shadow-s" autocomplete="off">
+				</div>
+				<div class="container-flex flex-v reg-entry">
+					<label for="username" class="mono-space reg-label">Username</label>
+					<input type="text" id="username" name="username" class="reg-input shadow-s" autocomplete="off">
+				</div>
+				<div class="container-flex flex-v reg-entry">
+					<label for="password" class="mono-space reg-label">Password</label>
+					<input type="password" id="password" name="password" class="reg-input shadow-s" autocomplete="off">
+				</div>
+				<div id="reg-btn" class="white btn-glow btn-glow-blue">Register</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="section-light full-span-h">
+	<p class="section-title">Check out a subject</p>
+	<p class="section-intro">Choose a subject that you'd like to explore, and we'll fix it up for you.</p>
+	<div class="subject-container">
+		{% for i in subjects %}
+		<div class="subject-btn container-flex flex-v flex-align-center">
+			<img class="subject-img" src={{ "/static/images/subjects/%s.png"%i }} width="100" height="100">
+			<p class="text-m">{{ i }}</p>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+<div class="section-dark">
+	<p class="section-title-s white">...or search up a subject here</p>
+	<div class="center-search">
+		<input class="search" type="text" name="search" placeholder="Search a Subject...">
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="/static/scripts/home.js"></script>
+{% endblock %}

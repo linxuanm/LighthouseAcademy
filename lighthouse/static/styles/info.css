@@ -1,0 +1,15 @@
+body {
+	background-color: #F7F7F7;
+}
+
+.section-info {
+	position: absolute;
+	background-color: #FFF;
+	top: 150px;
+	left: 0;
+	right: 0;
+	margin: auto;
+	width: 70%;
+	padding: 50px 50px;
+	border-radius: 20px;
+}

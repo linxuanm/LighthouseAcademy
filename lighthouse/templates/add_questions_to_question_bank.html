@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel='stylesheet' href='/static/styles/add_questions_to_question_bank.css'>
+{% endblock %}
+
+{% block content %}
+<div class=add-qs-container>
+	<div class="add-qs-title">
+		<h1>Add Questions to the Question Bank</h1>
+	</div>
+	<div class="add-qs-inputqs">
+		<div class="add-qs-question-block add-qs-hover" id="question-1">
+			<p>+</p>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="/static/libs/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<script src="/static/libs/jquery-autoheight.js"></script>
+<script type="text/javascript" src="/static/scripts/add_questions_to_question_bank.js"></script>
+{% endblock %}
+

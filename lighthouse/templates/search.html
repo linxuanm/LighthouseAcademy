@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel='stylesheet' href='/static/styles/search.css'>
+{% endblock %}
+
+{% block content %}
+<div class="search-filter">
+	<h1>Filter Search Result</h1>
+	<h2>Season:</h2>
+	<input type="checkbox" id="season-may" class="css-checkbox lrg">
+	<label for="season-may" class="css-label lrg"><span>March</span></label>
+	</br>
+	<input type="checkbox" id="season-may-june" class="css-checkbox lrg">
+	<label for="season-may-june" class="css-label lrg"><span>May - June</span></label>
+	</br>
+	<input type="checkbox" id="season-oct-nov" class="css-checkbox lrg">
+	<label for="season-oct-nov" class="css-label lrg"><span>October - November</span></label>
+	<h2>Subject:</h2>
+	<input type="checkbox" id="subject-addmath" class="css-checkbox lrg">
+	<label for="subject-addmath" class="css-label lrg"><span>Additional Math</span></label>
+	<h2>Paper:</h2>
+	<input type="checkbox" id="paper-1" class="css-checkbox lrg">
+	<label for="paper-1" class="css-label lrg"><span>1</span></label>
+	</br>
+	<input type="checkbox" id="paper-2" class="css-checkbox lrg">
+	<label for="paper-2" class="css-label lrg"><span>2</span></label>
+	</br>
+	<input type="checkbox" id="paper-4" class="css-checkbox lrg">
+	<label for="paper-4" class="css-label lrg"><span>4</span></label>
+	</br>
+	<input type="checkbox" id="paper-6" class="css-checkbox lrg">
+	<label for="paper-6" class="css-label lrg"><span>6</span></label>
+	<h2 style="margin-bottom: 10px;">Year:</h2>
+	<span><input type="text" class="search-filter-by-year"><span> to </span><input type="text" class="search-filter-by-year"></span>
+	<button>Apply</button>
+</div>
+<div class="search-area">
+	<div class="search-main">
+		<h1 class="search-ti">Search</h1>
+		<input type="text" name="main-search"></input>
+	</div>
+	<div class="search-result-space">
+		<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
+		<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
+		<div class="search-result-box">
+			<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+			<div class="search-question-details">
+				<p>Question ID: <span>s13-AddMat-1-2-0-5-6Z-E</span></p>
+				<p>Subject: <span>Additional Math</span></p>
+				<p>Season: <span>March</span></p>
+				<p>Year: <span>2019</span></p>
+				<p>Paper: <span>2</span></p>
+			</div>
+			<div class="search-question-details-right">
+				<p>Question: <span>6</span></p>
+				<p>Max Mark: <span>4</span></p>
+				<p>Chapter: <span>10E</span></p>
+				<p>Difficulty: <span>Easy</span></p>
+			</div>
+			</br>
+			<p class="search-question-extend-sub-question">Expand Sub-Questions</p>
+			<div class="search-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
+				<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
+				<div class="search-question-sub-question-box">
+					<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="search-question-details">
+						<p>Sub Question # <span>1</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="search-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
+				<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
+				<div class="search-question-sub-question-box">
+					<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="search-question-details">
+						<p>Sub Question # <span>2</span></p>
+					</div>
+					<div class="search-question-image">
+						<p>Question Image:</p>
+						<img src="/static/images/test-question-image/test-image-1.png"></img>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="search-result-space">
+		<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
+		<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
+		<div class="search-result-box">
+			<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+			<div class="search-question-details">
+				<p>Question ID: <span>s13-AddMat-1-2-0-5-6Z-E</span></p>
+				<p>Subject: <span>Additional Math</span></p>
+				<p>Season: <span>March</span></p>
+				<p>Year: <span>2019</span></p>
+				<p>Paper: <span>2</span></p>
+				<p>Question: <span>6</span></p>
+				<p>Max Mark: <span>4</span></p>
+				<p>Chapter: <span>10E</span></p>
+				<p>Difficulty: <span>Easy</span></p>
+			</div>
+			<div class="search-question-image">
+				<p>Question Image:</p>
+				<img src="/static/images/test-question-image/test-image-1.png"></img>
+			</div>
+			</br>
+			<p class="search-question-extend-sub-question">Expand Sub-Questions</p>
+			<div class="search-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
+				<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
+				<div class="search-question-sub-question-box">
+					<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="search-question-details">
+						<p>Sub Question # <span>1</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="search-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
+				<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
+				<div class="search-question-sub-question-box">
+					<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="search-question-details">
+						<p>Sub Question # <span>2</span></p>
+					</div>
+					<div class="search-question-image">
+						<p>Question Image:</p>
+						<img src="/static/images/test-question-image/test-image-1.png"></img>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="/static/libs/mathjax/tex-chtml.js" id="MathJax-script" async></script>
+<script type="text/javascript" src="/static/scripts/search.js"></script>
+{% endblock %}
+

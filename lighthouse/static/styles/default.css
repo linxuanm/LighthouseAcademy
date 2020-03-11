@@ -1,0 +1,191 @@
+* {
+	margin: 0;
+	font-family: Helvetica;
+}
+
+::placeholder {
+	color: #EEE;
+	font-size: 15px;
+}
+
+#nav-bar {
+	height: 70px;
+	background-color: #5FACFE;
+	position: fixed;
+	z-index: 1;
+}
+
+ul {
+	list-style: none;
+}
+
+li {
+	display: inline;
+}
+
+p {
+	font-size: 20px;
+}
+
+img {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+input {
+	outline-width: 0px;
+}
+
+.search {
+	width: 400px;
+	padding: 15px 10px;
+	background-color: #7FBCFE;
+	border-style: none;
+	color: #FFF;
+	font-size: 15px;
+	border-radius: 5px;
+	margin-left: 20px;
+}
+
+.full-span-h {
+	width: 100%;
+}
+
+.full-span-v {
+	height: 100%;
+}
+
+.container-center {
+	 margin: auto 0;
+}
+
+.container-flex {
+	display: flex;
+	justify-content: space-between;
+}
+
+.flex-align-center {
+	align-items: center;
+}
+
+.flex-v {
+	flex-direction: column;
+}
+
+.container-nav {
+	margin: 0 150px;
+	padding: 0 20px;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.underline {
+	position: relative;
+}
+
+.underline:after {
+	content: "";
+	position: absolute;
+	width: 0;
+	top: 100%;
+	height: 2px;
+	left: 0;
+	background-color: #FFF;
+	transition: width 0.3s ease-in-out;
+}
+
+.underline:hover:after {
+	width: 100%;
+}
+
+.no-select {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.nav-item {
+	margin: 0 20px;
+	font-size: 17px;
+	cursor: pointer;
+}
+
+.white {
+	color: #FFF;
+}
+
+.spacing-l {
+	line-height: 40px;
+}
+
+.btn-glow {
+	padding: 10px;
+	border: 2px solid;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: 0.3s;
+}
+
+.btn-glow-blue {
+	background-color: #FFF;
+	color: #5FACFE;
+}
+
+.btn-glow-blue:hover {
+	background-color: #5FACFE;
+	color: #FFF;
+}
+
+.splash {
+	font-size: 50px;
+	font-family: Courier;
+}
+
+.limit-width-m {
+	max-width: 450px;
+}
+
+.space-top-l {
+	margin-top: 40px;
+}
+
+.text-s {
+	font-size: 15px;
+}
+
+.text-m {
+	font-size: 17.5px;
+}
+
+.text-l {
+	font-size: 20px;
+}
+
+.dark-light {
+	background-color: #F7F7F7;
+}
+
+.shadow {
+	box-shadow: #777 3px 3px 3px;
+}
+
+.shadow-s {
+	box-shadow: #CCC 1px 1px 1px;
+}
+
+.shadow-m {
+	box-shadow: #CCC 2px 2px 2px;
+}
+
+.mono-space {
+	font-family: Courier;
+}

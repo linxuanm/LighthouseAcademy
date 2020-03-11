@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel='stylesheet' href='/static/styles/info.css'>
+{% endblock %}
+
+{% block content %}
+<div class="section-info shadow-m">
+	<h1>{{ header }}</h1>
+	<br><hr><br><br>
+	{% for i in sections %}
+		<p>{{ i | safe }}</p>
+		<br>
+	{% endfor %}
+</div>
+{% endblock %}

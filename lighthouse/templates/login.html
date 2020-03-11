@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel='stylesheet' href='/static/styles/login.css'>
+{% endblock %}
+
+{% block content %}
+<div class="login-content">
+	<p class="login-title">Login to Lighthouse Academy</p>
+	<img src="static/images/logo-blue.png" width="80px" height="80px" style="margin: 0px auto; display: block;">
+	<div class="login-box">
+		<form method="POST">
+			<div class="login-entry">
+				<label for="username" class="login-label">Username</label>
+				<input type="text" id="username" name="username" class="login-input"></input>
+			</div>
+			<div class="login-entry">
+				<label for="username" class="login-label">Password</label>
+				<input type="password" id="password" name="password" class="login-input"></input>
+			</div>
+			<div class="login-submit-button btn-glow">Submit</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts%}
+{% endblock %}

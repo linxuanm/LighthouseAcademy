@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel='stylesheet' href='/static/styles/preview_paper.css'>
+{% endblock %}
+
+{% block content %}
+<div class="preview-preview">
+	<h1>Sort the Questions</h1>
+	<div class="preview-preview-id">
+		<div class="preview-question-thumbnail"><span>1</span><img src="/static/images/icons/times-solid-blue.svg"></img></div>
+		<div class="preview-question-thumbnail"><span>2</span><img src="/static/images/icons/times-solid-blue.svg"></img></div>
+		<div class="preview-question-thumbnail"><span>3</span><img src="/static/images/icons/times-solid-blue.svg"></img></div>
+	</div>
+</div>
+<div class="preview-main">
+	<div class="preview-document">
+		<object type="application/pdf" data="/static/images/test-question-image/0606_m19_qp_22.pdf">
+		<p>Insert your error message here, if the PDF cannot be displayed.</p>
+	</object>
+	<button class="">Download Question Paper</button>
+	<button class="">Download Mark Scheme</button>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="/static/scripts/preview_paper.js"></script>
+{% endblock %}

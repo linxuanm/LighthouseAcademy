@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel='stylesheet' href='/static/styles/generate_paper.css'>
+{% endblock %}
+
+{% block content %}
+<div class="generate-filter">
+	<h1>Add Questions to Paper</h1>
+	<div class="generate-filter-paper">
+		<h2>Paper:</h2>
+		<input type="checkbox" id="paper-1" class="css-checkbox lrg">
+		<label for="paper-1" class="css-label lrg"><span>1</span></label>
+		</br>
+		<input type="checkbox" id="paper-2" class="css-checkbox lrg">
+		<label for="paper-2" class="css-label lrg"><span>2</span></label>
+	</div>
+	<div class="generate-filter-year">
+		<h2>Year:</h2>
+		<input type="checkbox" id="year-2002" class="css-checkbox lrg">
+		<label for="year-2002" class="css-label lrg"><span>2002</span></label>
+		<input type="checkbox" id="year-2003" class="css-checkbox lrg">
+		<label for="year-2003" class="css-label lrg"><span>2003</span></label>
+		<input type="checkbox" id="year-2004" class="css-checkbox lrg">
+		<label for="year-2004" class="css-label lrg"><span>2004</span></label>
+		<input type="checkbox" id="year-2005" class="css-checkbox lrg">
+		<label for="year-2005" class="css-label lrg"><span>2005</span></label>
+		<input type="checkbox" id="year-2006" class="css-checkbox lrg">
+		<label for="year-2006" class="css-label lrg"><span>2006</span></label>
+		<input type="checkbox" id="year-2007" class="css-checkbox lrg">
+		<label for="year-2007" class="css-label lrg"><span>2007</span></label>
+		<input type="checkbox" id="year-2008" class="css-checkbox lrg">
+		<label for="year-2008" class="css-label lrg"><span>2008</span></label>
+		<input type="checkbox" id="year-2009" class="css-checkbox lrg">
+		<label for="year-2009" class="css-label lrg"><span>2009</span></label>
+		<input type="checkbox" id="year-2010" class="css-checkbox lrg">
+		<label for="year-2010" class="css-label lrg"><span>2010</span></label>
+		<input type="checkbox" id="year-2011" class="css-checkbox lrg">
+		<label for="year-2011" class="css-label lrg"><span>2011</span></label>
+		<input type="checkbox" id="year-2012" class="css-checkbox lrg">
+		<label for="year-2012" class="css-label lrg"><span>2012</span></label>
+		<input type="checkbox" id="year-2013" class="css-checkbox lrg">
+		<label for="year-2013" class="css-label lrg"><span>2013</span></label>
+		<input type="checkbox" id="year-2014" class="css-checkbox lrg">
+		<label for="year-2014" class="css-label lrg"><span>2014</span></label>
+		<input type="checkbox" id="year-2015" class="css-checkbox lrg">
+		<label for="year-2015" class="css-label lrg"><span>2015</span></label>
+		<input type="checkbox" id="year-2016" class="css-checkbox lrg">
+		<label for="year-2016" class="css-label lrg"><span>2016</span></label>
+		<input type="checkbox" id="year-2017" class="css-checkbox lrg">
+		<label for="year-2017" class="css-label lrg"><span>2017</span></label>
+		<input type="checkbox" id="year-2018" class="css-checkbox lrg">
+		<label for="year-2018" class="css-label lrg"><span>2018</span></label>
+		<input type="checkbox" id="year-2019" class="css-checkbox lrg">
+		<label for="year-2019" class="css-label lrg"><span>2019</span></label>
+	</div>
+	<div class="generate-filter-chapter">
+		<h2>Chapter:</h2>
+		<input type="checkbox" id="chapter-1" class="css-checkbox lrg">
+		<label for="chapter-1" class="css-label lrg"><span>1</span></label>
+		<input type="checkbox" id="chapter-2" class="css-checkbox lrg">
+		<label for="chapter-2" class="css-label lrg"><span>2</span></label>
+		<input type="checkbox" id="chapter-3" class="css-checkbox lrg">
+		<label for="chapter-3" class="css-label lrg"><span>3</span></label>
+		<input type="checkbox" id="chapter-4" class="css-checkbox lrg">
+		<label for="chapter-4" class="css-label lrg"><span>4</span></label>
+		<input type="checkbox" id="chapter-5" class="css-checkbox lrg">
+		<label for="chapter-5" class="css-label lrg"><span>5</span></label>
+		<input type="checkbox" id="chapter-6" class="css-checkbox lrg">
+		<label for="chapter-6" class="css-label lrg"><span>6</span></label>
+		<input type="checkbox" id="chapter-7" class="css-checkbox lrg">
+		<label for="chapter-7" class="css-label lrg"><span>7</span></label>
+		<input type="checkbox" id="chapter-8" class="css-checkbox lrg">
+		<label for="chapter-8" class="css-label lrg"><span>8</span></label>
+		<input type="checkbox" id="chapter-9" class="css-checkbox lrg">
+		<label for="chapter-9" class="css-label lrg"><span>9</span></label>
+		<input type="checkbox" id="chapter-10" class="css-checkbox lrg">
+		<label for="chapter-10" class="css-label lrg"><span>10</span></label>
+		</br>
+		<input type="checkbox" id="chapter-11" class="css-checkbox lrg">
+		<label for="chapter-11" class="css-label lrg"><span>11</span></label>
+		<input type="checkbox" id="chapter-12" class="css-checkbox lrg">
+		<label for="chapter-12" class="css-label lrg"><span>12</span></label>
+		<input type="checkbox" id="chapter-13" class="css-checkbox lrg">
+		<label for="chapter-13" class="css-label lrg"><span>13</span></label>
+		<input type="checkbox" id="chapter-14" class="css-checkbox lrg">
+		<label for="chapter-14" class="css-label lrg"><span>14</span></label>
+		<input type="checkbox" id="chapter-15" class="css-checkbox lrg">
+		<label for="chapter-15" class="css-label lrg"><span>15</span></label>
+		<input type="checkbox" id="chapter-16" class="css-checkbox lrg">
+		<label for="chapter-16" class="css-label lrg"><span>16</span></label>
+	</div>
+	<div class="generate-optional-filter">
+		<h2>Season:</h2>
+		<input type="checkbox" id="season-may" disabled="disabled" class="css-checkbox lrg">
+		<label for="season-may" style="cursor: not-allowed;" class="css-label lrg"><span>March</span></label>
+		</br>
+		<input type="checkbox" id="season-may-june" disabled="disabled" class="css-checkbox lrg">
+		<label for="season-may-june" style="cursor: not-allowed;" class="css-label lrg"><span>May - June</span></label>
+		</br>
+		<input type="checkbox" id="season-oct-nov" disabled="disabled" class="css-checkbox lrg">
+		<label for="season-oct-nov" style="cursor: not-allowed;" class="css-label lrg"><span>October - November</span></label>
+		<h2>Difficulty:</h2>
+		<input type="checkbox" id="difficulty-easy" disabled="disabled" class="css-checkbox lrg">
+		<label for="difficulty-easy" style="cursor: not-allowed;" class="css-label lrg"><span>Easy</span></label>
+		</br>
+		<input type="checkbox" id="difficulty-hard" disabled="disabled" class="css-checkbox lrg">
+		<label for="difficulty-hard" style="cursor: not-allowed;" class="css-label lrg"><span>Hard</span></label>
+	</div>
+</div>
+<div class="generate-area">
+	<div class="generate-result-space">
+		<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
+		<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
+		<div class="generate-result-box">
+			<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+			<div class="generate-question-details">
+				<p>Question ID: <span>anyid</span></p>
+				<p>Subject: <span>Additional Math</span></p>
+				<p>Season: <span>March</span></p>
+				<p>Year: <span>2019</span></p>
+				<p>Paper: <span>2</span></p>
+			</div>
+			<div class="generate-question-details-right">
+				<p>Question: <span>6</span></p>
+				<p>Max Mark: <span>4</span></p>
+				<p>Chapter: <span>10E</span></p>
+				<p>Difficulty: <span>Easy</span></p>
+			</div>
+			</br>
+			<p class="generate-question-extend-sub-question">Expand Sub-Questions</p>
+			<div class="generate-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="anyid" class="css-checkbox lrg">
+				<label for="anyid" class="css-label lrg"></label>
+				<div class="generate-question-sub-question-box">
+					<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="generate-question-details">
+						<p>Sub Question # <span>1</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="generate-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="anyid" class="css-checkbox lrg">
+			<label for="anyid" class="css-label lrg"></label>
+				<div class="generate-question-sub-question-box">
+					<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="generate-question-details">
+						<p>Sub Question # <span>2</span></p>
+					</div>
+					<div class="generate-question-image">
+						<p>Question Image:</p>
+						<img src="/static/images/test-question-image/test-image-1.png"></img>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="generate-result-space">
+		<input type="checkbox" id="anyid" class="css-checkbox lrg">
+		<label for="anyid" class="css-label lrg"></label>
+		<div class="generate-result-box">
+			<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+			<div class="generate-question-details">
+				<p>Question ID: <span>anyid</span></p>
+				<p>Subject: <span>Additional Math</span></p>
+				<p>Season: <span>March</span></p>
+				<p>Year: <span>2019</span></p>
+				<p>Paper: <span>2</span></p>
+				<p>Question: <span>6</span></p>
+				<p>Max Mark: <span>4</span></p>
+				<p>Chapter: <span>10E</span></p>
+				<p>Difficulty: <span>Easy</span></p>
+			</div>
+			<div class="generate-question-image">
+				<p>Question Image:</p>
+				<img src="/static/images/test-question-image/test-image-1.png"></img>
+			</div>
+			</br>
+			<p class="generate-question-extend-sub-question">Expand Sub-Questions</p>
+			<div class="generate-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="anyid" class="css-checkbox lrg">
+				<label for="anyid" class="css-label lrg"></label>
+				<div class="generate-question-sub-question-box">
+					<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="generate-question-details">
+						<p>Sub Question # <span>1</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="generate-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="anyid" class="css-checkbox lrg">
+				<label for="anyid" class="css-label lrg"></label>
+				<div class="generate-question-sub-question-box">
+					<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="generate-question-details">
+						<p>Sub Question # <span>2</span></p>
+					</div>
+					<div class="generate-question-image">
+						<p>Question Image:</p>
+						<img src="/static/images/test-question-image/test-image-1.png"></img>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="generate-result-space">
+		<input type="checkbox" id="anyid" class="css-checkbox lrg">
+		<label for="anyid" class="css-label lrg"></label>
+		<div class="generate-result-box">
+			<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+			<div class="generate-question-details">
+				<p>Question ID: <span>anyid</span></p>
+				<p>Subject: <span>Additional Math</span></p>
+				<p>Season: <span>March</span></p>
+				<p>Year: <span>2019</span></p>
+				<p>Paper: <span>2</span></p>
+				<p>Question: <span>6</span></p>
+				<p>Max Mark: <span>4</span></p>
+				<p>Chapter: <span>10E</span></p>
+				<p>Difficulty: <span>Easy</span></p>
+			</div>
+			<div class="generate-question-image">
+				<p>Question Image:</p>
+				<img src="/static/images/test-question-image/test-image-1.png"></img>
+			</div>
+			</br>
+			<p class="generate-question-extend-sub-question">Expand Sub-Questions</p>
+			<div class="generate-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="anyid" class="css-checkbox lrg">
+				<label for="anyid" class="css-label lrg"></label>
+				<div class="generate-question-sub-question-box">
+					<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="generate-question-details">
+						<p>Sub Question # <span>1</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="generate-question-sub-question-space" style="display: none;">
+				<input type="checkbox" id="anyid" class="css-checkbox lrg">
+				<label for="anyid" class="css-label lrg"></label>
+				<div class="generate-question-sub-question-box">
+					<p class="generate-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+					<div class="generate-question-details">
+						<p>Sub Question # <span>2</span></p>
+					</div>
+					<div class="generate-question-image">
+						<p>Question Image:</p>
+						<img src="/static/images/test-question-image/test-image-1.png"></img>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="generate-preview">
+	<h1>Selected Questions</h1>
+	<p>Amount: <span class="generate-preview-statistics">0</span></p>
+	<p>Total Points: <span class="generate-preview-statistics">0</span></p>
+	<div class="generate-preview-id">
+		<div class="generate-question-thumbnail"><span>anyid</span><img src="/static/images/icons/times-solid-blue.svg"></img></div>
+		<div class="generate-question-thumbnail"><span>anyid</span><img src="/static/images/icons/times-solid-blue.svg"></img></div>
+	</div>
+	<div class="generate-proceed">
+		<p>Proceed</p>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="/static/scripts/generate_paper.js"></script>
+{% endblock %}
