@@ -277,7 +277,6 @@
 	function bind_add_credit(add_mark_button){
 		add_mark_button.on("click",function(){
 			var great_grandparent = $(this).parent().parent().parent() 
-			console.log(great_grandparent)
 			great_grandparent.find(".add-qs-ms-credit-block").first().append(new_credit);
 			great_grandparent.find(".add-qs-ms-answer-block").first().append(new_answer);
 			bind_latex_conversion(great_grandparent.find(".add-qs-ms-answer-block").find(".add-qs-ms-answer-input").last());
@@ -304,112 +303,192 @@
 		}
 	}
 
+	function validate_user_input(){
+
+		var empty_fields = []
+		var id_codes = []
+		var repeated_id_code = []
+		var bad_id_code_regex = []
+		var bad_credit_regex = []
+
+		var id_code_regex = /^[msw][10][0-9]-AddMath-[12]{1}-(\d{2}|\d{1})-0-(\d{2}|\d{1})-(\d{2}|\d{1})[a-zA-Z]-[EDed]$/
+		var credit_regex = /^[a-zA-Z][0-9]$/
+		
+
+		$(".add-qs-question-input").each(function(){
+			if (!$(this).val()) {
+				empty_fields.push($(this))
+			}
+		})
+		$(".add-qs-ms-answer-input").each(function(){
+			if (!$(this).val()) {
+				empty_fields.push($(this))
+			}
+		})
+		$(".add-qs-ms-credit-input").each(function(){
+			if (!$(this).val()) {
+				empty_fields.push($(this))
+			}
+			if (!$(this).val().match(credit_regex)) {
+				bad_credit_regex.push($(this))
+			}
+		})
+		$(".add-qs-question-id-input").each(function(){
+			if (!$(this).val()) {
+				empty_fields.push($(this))
+			}
+			if (!$(this).val().match(id_code_regex)) {
+				bad_id_code_regex.push($(this))
+			}
+			if (id_codes.includes($(this).val())) {
+				repeated_id_code.push($(this))
+			}
+			id_codes.push($(this).val())
+		})
+
+		if (empty_fields.length != 0) {
+			empty_fields.forEach(function(item, index){
+				item.addClass("add-qs-invalid-input")
+			})
+			alert("Fields Cannot Be Empty")
+			return false
+		}else{
+			if (repeated_id_code.length != 0) {
+				repeated_id_code.forEach(function(item, index){
+					item.addClass("add-qs-invalid-input")
+				})
+				alert("Question ID Must Be Unique")
+				return false
+			}else{
+				if (bad_id_code_regex.length != 0) {
+					bad_id_code_regex.forEach(function(item, index){
+						item.addClass("add-qs-invalid-input")
+					})
+					alert("Invalid Question ID Format")
+					return false
+				}else{
+					if (bad_credit_regex.length != 0) {
+						bad_credit_regex.forEach(function(item, index){
+							item.addClass("add-qs-invalid-input")
+						})
+						alert("Invalid Marks Format")
+						return false
+					}else{
+						return true
+					}
+				}
+			}
+		}
+	}
+
+	function submit_data_to_server(){
+		var params = {
+			questions:{
+			},
+			sub_questions:{
+				
+			},
+			mark:{
+
+			}
+		}
+
+		var question_count = 0
+		$(".add-qs-question-space").each(function(){
+			var text = $(this).children(".add-qs-question-input").val()
+			var id_code = $(this).find(".add-qs-question-id-input").val()
+			if ($.inArray($(this).children(".add-qs-question-input").attr("id"), $.map(image_array, function(v) { return v[1]; })) > -1) {
+				var has_image = true
+			}else{
+				var has_image = false
+			}
+			if ($(this).children(".add-qs-sub-question-space").length) {
+				var has_subquestion = true
+			}else{
+				var has_subquestion = false
+			}
+			params.questions[question_count] = {text:text,has_image:has_image,has_subquestion:has_subquestion,id_code:id_code}
+			question_count ++
+		})
+
+		var sub_question_count = 0
+		$(".add-qs-sub-question-space").each(function(){
+			var text = $(this).children(".add-qs-question-input").val()
+			var main_question_id_code = $(this).parent().find(".add-qs-question-id-input").val()
+			if ($.inArray($(this).children(".add-qs-question-input").attr("id"), $.map(image_array, function(v) { return v[1]; })) > -1) {
+				var has_image = true
+			}else{
+				var has_image = false
+			}
+			var sub_question_number = $(this).parent().children(".add-qs-sub-question-space").index($(this)) + 1;
+			id_code = main_question_id_code.replace("-0-", "-" + sub_question_number + "-")
+			params.sub_questions[sub_question_count] = {text:text,has_image:has_image,id_code:id_code,sub_question_number:sub_question_number,main_question_id_code:main_question_id_code}
+			sub_question_count ++
+		})
+
+		var mark_count = 0
+		$(".add-qs-ms-answer-space").each(function(){
+			var text = $(this).children(".add-qs-ms-answer-input").val()
+			var question_id = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
+			var order = $(this).parent().children(".add-qs-ms-answer-space").index($(this));
+			var main_question_id_code = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
+			var mark = $(this).parent().siblings(".add-qs-ms-credit-block").children(".add-qs-ms-credit-space").eq(order).children(".add-qs-ms-credit-input").val()
+			if ($(this).parents(".add-qs-ms-sub-question-space").length) {
+				for_sub_question = $(this).parents(".add-qs-question-block-confirmed").find(".add-qs-ms-sub-question-space").index($(this).parents(".add-qs-ms-sub-question-space")) + 1
+			}else{
+				var for_sub_question = 0
+			}
+			id_code = main_question_id_code.replace("-0-", "-" + for_sub_question + "-")
+			params.mark[mark_count] = {text:text,question_id:question_id,order:order,mark:mark,id_code:id_code,for_sub_question:for_sub_question,main_question_id_code:main_question_id_code} //for_sub_question will not be inserted in to the database
+			mark_count ++
+		})
+		$.post(
+			"/add_qs",
+			params,
+			function(data) {
+				switch (data.code) {
+					case 0: // Does nothing.
+						break;
+					case 1: // Goes to URL.
+						window.location = data.content;
+						break;
+					case 2: // Infos the user.
+						alert(data.content);
+						break;
+					case 5: //Tells the Program to Proceed
+						image_array.forEach(function(item, index){
+							formdata = new FormData()
+							id = item[1]
+							id_code = $("#" + id + "").parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
+							formdata.append("file",item[0])
+							formdata.append("id_code",id_code)
+							formdata.append("for_sub_question",item[2])
+							$.ajax({
+						        type: 'POST',
+						        url:  '/upload_image',
+						        data: formdata,
+						        contentType: false,
+						        cache: false,
+						        processData: false,
+						        success: function(data) {
+						        },
+					    	});
+						})
+						break;
+				}
+			},
+		);
+	}
+
 	function check_and_insert_delete_submit_button(){
 		if ($(".add-qs-question-space").length != 0 && submit_added == false) {
 			$(".add-qs-question-block-confirmed").last().parent().append(submit_button);
 			$("#submit-button").on("click", function(){
-				var params = {
-					questions:{
-					},
-					sub_questions:{
-						
-					},
-					mark:{
-
-					}
+				$("input").removeClass("add-qs-invalid-input")
+				$("textarea").removeClass("add-qs-invalid-input") //remove existing invalid field warnings
+				if (validate_user_input()) {
+					submit_data_to_server()
 				}
-
-				var question_count = 0
-				$(".add-qs-question-space").each(function(){
-					var text = $(this).children(".add-qs-question-input").val()
-					var id_code = $(this).find(".add-qs-question-id-input").val()
-					if ($.inArray($(this).children(".add-qs-question-input").attr("id"), $.map(image_array, function(v) { return v[1]; })) > -1) {
-						var has_image = true
-					}else{
-						var has_image = false
-					}
-					if ($(this).children(".add-qs-sub-question-space").length) {
-						var has_subquestion = true
-					}else{
-						var has_subquestion = false
-					}
-					params.questions[question_count] = {text:text,has_image:has_image,has_subquestion:has_subquestion,id_code:id_code}
-					question_count ++
-				})
-
-				var sub_question_count = 0
-				$(".add-qs-sub-question-space").each(function(){
-					var text = $(this).children(".add-qs-question-input").val()
-					var id_code = $(this).parent().find(".add-qs-question-id-input").val()
-					if ($.inArray($(this).children(".add-qs-question-input").attr("id"), $.map(image_array, function(v) { return v[1]; })) > -1) {
-						var has_image = true
-					}else{
-						var has_image = false
-					}
-					var sub_question_number = $(this).parent().children(".add-qs-sub-question-space").index($(this)) + 1;
-					params.sub_questions[sub_question_count] = {text:text,has_image:has_image,id_code:id_code,sub_question_number:sub_question_number}
-					sub_question_count ++
-				})
-
-				var mark_count = 0
-				$(".add-qs-ms-answer-space").each(function(){
-					var text = $(this).children(".add-qs-ms-answer-input").val()
-					var question_id = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
-					var order = $(this).parent().children(".add-qs-ms-answer-space").index($(this));
-					var id_code = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
-					var mark = $(this).parent().siblings(".add-qs-ms-credit-block").children(".add-qs-ms-credit-space").eq(order).children(".add-qs-ms-credit-input").val()
-					if ($(this).parents(".add-qs-ms-sub-question-space").length) {
-						for_sub_question = $(this).parents(".add-qs-question-block-confirmed").find(".add-qs-ms-sub-question-space").index($(this).parents(".add-qs-ms-sub-question-space")) + 1
-						console.log(for_sub_question)
-					}else{
-						var for_sub_question = 0
-					}
-					params.mark[mark_count] = {text:text,question_id:question_id,order:order,mark:mark,id_code:id_code,for_sub_question:for_sub_question} //for_sub_question will not be inserted in to the database
-					mark_count ++
-				})
-				$.post(
-					"/add_qs",
-					params,
-					function(data) {
-						switch (data.code) {
-							case 0: // Does nothing.
-								break;
-							case 1: // Goes to URL.
-								window.location = data.content;
-								break;
-							case 2: // Infos the user.
-								alert(data.content);
-								break;
-							case 3: // Warns the user.
-								alert('Warning: ' + data.content);
-								break;
-							case 4: // Errors the user.
-								alert('Error: ' + data.content);
-								break;
-							case 5: //Tells the Program to Proceed
-								image_array.forEach(function(item, index){
-									formdata = new FormData()
-									id = item[1]
-									id_code = $("#" + id + "").parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
-									formdata.append("file",item[0])
-									formdata.append("id_code",id_code)
-									formdata.append("for_sub_question",item[2])
-									$.ajax({
-								        type: 'POST',
-								        url:  '/upload_image',
-								        data: formdata,
-								        contentType: false,
-								        cache: false,
-								        processData: false,
-								        success: function(data) {
-								            console.log('Success!');
-								        },
-							    	});
-								})
-								break;
-						}
-					},
-				);
 				
 			})
 			submit_added = true
@@ -455,7 +534,6 @@
 								$(this).siblings(".add-qs-image-icons").remove();
 								$(this).remove();
 								image_array.splice($.inArray(question_id, $.map(image_array, function(v) { return v[1]; })),1);
-								console.log(image_array)
 							})).after($("<img>",{ //Image icon
 								src:"/static/images/icons/file-image-solid.svg",
 								class:"add-qs-image-icons",
@@ -466,7 +544,6 @@
 								var for_sub_question = 0
 							}
 							image_array.push([target_file,question_id, for_sub_question]);
-							console.log(image_array);
 						}
 					}
 				}

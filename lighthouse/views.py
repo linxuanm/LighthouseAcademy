@@ -71,38 +71,47 @@ def add_questions_to_question_bank():
 @app.route('/add_qs', methods=['POST'])
 def add_qs():
 	data = request.form.to_dict()
-	print(data)
+
 	for key in data:
 		if "questions" in key and "text" in key and "sub" not in key:
 			series_id = key[0:-6]
+			id_code = data.get("{}[id_code]".format(series_id))
+			if db_entry_exists(Question, id_code=id_code):
+				return {"code":2,"content":"One of the Question ID Exists in DataBase"}, 200
+
 			question = Question(data.get(key), data.get("{}[id_code]".format(series_id)), str2bool(data.get("{}[has_image]".format(series_id))), str2bool(data.get("{}[has_subquestion]".format(series_id))))
 			db.session.add(question)
 			db.session.commit()
+
 	for key in data:
 		if "sub_questions" in key and "text" in key:
 			series_id = key[0:-6]
-			id_code = data.get("{}[id_code]".format(series_id))
-			main_question = Question.query.filter_by(id_code = id_code).first()
+			main_question_id_code = data.get("{}[main_question_id_code]".format(series_id))
+			main_question = Question.query.filter_by(id_code = main_question_id_code).first()
 			main_question_id = main_question.id
-			sub_question = Sub_Question(data.get(key), id_code, str2bool(data.get("{}[has_image]".format(series_id))), main_question_id, int(data.get("{}[sub_question_number]".format(series_id))))
+
+			sub_question = Sub_Question(data.get(key), data.get("{}[id_code]".format(series_id)), str2bool(data.get("{}[has_image]".format(series_id))), main_question_id, int(data.get("{}[sub_question_number]".format(series_id))))
 			db.session.add(sub_question)
 			db.session.commit()
+
 	for key in data:
 		if "mark" in key and "text" in key:
 			series_id = key[0:-6]
-			id_code = data.get("{}[id_code]".format(series_id))
+			main_question_id_code = data.get("{}[id_code]".format(series_id))
 			for_sub_question = int(data.get("{}[for_sub_question]".format(series_id)))
 			if for_sub_question == 0:
-				question = Question.query.filter_by(id_code = id_code).first()
+				question = Question.query.filter_by(id_code = main_question_id_code).first()
 				question_id = question.id
 				for_sub_question = False
 			else:
-				question = Sub_Question.query.filter_by(id_code = id_code, sub_question_number = for_sub_question).first()
+				question = Sub_Question.query.filter_by(id_code = data.get("{}[id_code]".format(series_id)), sub_question_number = for_sub_question).first()
 				question_id = question.id
 				for_sub_question = True
-			mark = Mark(data.get(key), data.get("{}[mark]".format(series_id)), id_code, question_id, int(data.get("{}[order]".format(series_id))), for_sub_question)
+
+			mark = Mark(data.get(key), data.get("{}[mark]".format(series_id)), data.get("{}[id_code]".format(series_id)), question_id, int(data.get("{}[order]".format(series_id))), for_sub_question)
 			db.session.add(mark)
 			db.session.commit()
+
 	return {"code":5,"content":"hi"}, 200
 
 @app.route('/upload_image', methods=['POST'])

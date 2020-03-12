@@ -18,9 +18,6 @@ function responsive_post(url, params) {
 				case 4: // Errors the user.
 					alert('Error: ' + data.content);
 					break;
-				case 5: //Tells the Program to Proceed
-					return "nihao"
-					break;
 			}
 		},
 	);

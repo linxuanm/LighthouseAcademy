@@ -420,3 +420,7 @@
 	min-height: 100px;
 	padding-left: calc(20px + 5%);
 }
+
+.add-qs-invalid-input{
+	border: 2px solid #f00 !important;
+}
