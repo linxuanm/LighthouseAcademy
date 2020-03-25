@@ -1,3 +1,4 @@
+var image_array = [];
 (function($) {
 	const choice_mc_question = `
 	<div class="add-qs-choose-mc">
@@ -76,8 +77,6 @@
 
 	var qid = 1;
 	var submit_added = false;
-
-	var image_array = [];
 
 	function return_question_block(qid){
 		return `
@@ -311,7 +310,7 @@
 		var bad_id_code_regex = []
 		var bad_credit_regex = []
 
-		var id_code_regex = /^[msw][10][0-9]-AddMath-[12]{1}-(\d{2}|\d{1})-0-(\d{2}|\d{1})-(\d{2}|\d{1})[a-zA-Z]-[EDed]$/
+		var id_code_regex = /^[msw][10][0-9]-AddMat-[12]{1}-(\d{2}|\d{1})-0-(\d{2}|\d{1})-(\d{2}|\d{1})-[EDM]$/
 		var credit_regex = /^[a-zA-Z][0-9]$/
 		
 
@@ -442,42 +441,8 @@
 			params.mark[mark_count] = {text:text,question_id:question_id,order:order,mark:mark,id_code:id_code,for_sub_question:for_sub_question,main_question_id_code:main_question_id_code} //for_sub_question will not be inserted in to the database
 			mark_count ++
 		})
-		$.post(
-			"/add_qs",
-			params,
-			function(data) {
-				switch (data.code) {
-					case 0: // Does nothing.
-						break;
-					case 1: // Goes to URL.
-						window.location = data.content;
-						break;
-					case 2: // Infos the user.
-						alert(data.content);
-						break;
-					case 5: //Tells the Program to Proceed
-						image_array.forEach(function(item, index){
-							formdata = new FormData()
-							id = item[1]
-							id_code = $("#" + id + "").parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
-							formdata.append("file",item[0])
-							formdata.append("id_code",id_code)
-							formdata.append("for_sub_question",item[2])
-							$.ajax({
-						        type: 'POST',
-						        url:  '/upload_image',
-						        data: formdata,
-						        contentType: false,
-						        cache: false,
-						        processData: false,
-						        success: function(data) {
-						        },
-					    	});
-						})
-						break;
-				}
-			},
-		);
+
+		responsive_post("/add_qs",params)
 	}
 
 	function check_and_insert_delete_submit_button(){
@@ -544,6 +509,7 @@
 								var for_sub_question = 0
 							}
 							image_array.push([target_file,question_id, for_sub_question]);
+							console.log(image_array)
 						}
 					}
 				}

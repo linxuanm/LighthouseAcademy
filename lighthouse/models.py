@@ -2,6 +2,7 @@ from lighthouse import db
 from lighthouse.image_loader import get_image
 
 import time
+import re
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -53,6 +54,14 @@ class Question(db.Model):
 	id_code = db.Column(db.String(80), nullable=False)
 	has_image = db.Column(db.Boolean(), nullable=False)
 	has_subquestion = db.Column(db.Boolean(), nullable=False)
+	attr_subject = db.Column(db.String(80), nullable=False)
+	attr_season = db.Column(db.String(5), nullable=False)
+	attr_year = db.Column(db.String(10), nullable=False)
+	attr_paper = db.Column(db.String(5), nullable=False)
+	attr_question = db.Column(db.String(5), nullable=False)
+	attr_maxMark = db.Column(db.String(5), nullable=False)
+	attr_chapter = db.Column(db.String(5), nullable=False)
+	attr_difficulty = db.Column(db.String(5), nullable=False)
 
 	def __init__(self, text, id_code, has_image, has_subquestion):
 		self.text = text
@@ -60,8 +69,35 @@ class Question(db.Model):
 		self.has_image = has_image
 		self.has_subquestion = has_subquestion
 
+		if re.search(r'(?:-(\w+)){1}', id_code).group(1) == 'AddMat':
+			self.attr_subject = 'Additional Mathematics'
+
+		if id_code[:1] == 'm':
+			season = 'March'
+		elif id_code[:1] == 's':
+			season = 'May-June'
+		else:
+			season = 'November'
+		self.attr_season = season
+
+		if re.search(r'(?:-(\w+)){7}', id_code).group(1) == 'E':
+			difficulty = 'Easy'
+		elif re.search(r'(?:-(\w+)){7}', id_code).group(1) == 'M':
+			difficulty = 'Medium'
+		else:
+			difficulty = 'Hard'
+		self.attr_difficulty = difficulty
+
+		self.attr_year = '20{}'.format(id_code[1:3])
+		self.attr_paper = re.search(r'(?:-(\w+)){2}', id_code).group(1)
+		self.attr_question = re.search(r'(?:-(\w+)){3}', id_code).group(1)
+		self.attr_maxMark= re.search(r'(?:-(\w+)){5}', id_code).group(1)
+		self.attr_chapter = re.search(r'(?:-(\w+)){6}', id_code).group(1)
+
+		
+
 	def get_image_path(self):
-		return get_image(self.id, "questions")
+		return get_image(self.id_code, "questions")
 
 
 class Sub_Question(db.Model):
@@ -83,7 +119,10 @@ class Sub_Question(db.Model):
 		self.sub_question_number = sub_question_number
 
 	def get_image_path(self):
-		return get_image(self.id, "sub_questions")
+		return get_image(self.id_code, "sub_questions")
+
+	def get_main_question(self):
+		return Question.query.filter_by(id=self.id).first()
 
 class Mark(db.Model):
 

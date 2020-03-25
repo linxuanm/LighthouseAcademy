@@ -117,14 +117,34 @@ user-select: none;
 }
 
 .search-main input{
-	width: 100%;
-	max-width: 800px;
+	width: 85%;
+	max-width: 640px;
 	line-height: 20px;
 	font-size: 20px;
 	padding: 10px 10px;
 	margin-top: 10px;
 	border-radius: 5px;
+	float: left;
 	border: 2px solid #e5e5e5;
+}
+
+.search-main button{
+	width: calc(10% - 10px);
+	max-width: 110px;
+	margin-top: 10px;
+	margin-left: 10px;
+	height: 46px;
+	border-radius: 5px;
+	float: left;
+	background-color: #5FACFE;
+}
+
+.search-main button img{
+	height: 20px;
+	width: 20px;
+	text-align: center;
+	justify-content: center;
+	padding-top: 3px;
 }
 
 .search-result-space{
@@ -202,8 +222,10 @@ user-select: none;
 }
 
 .search-question-image img{
+	margin-top: 10px;
+	max-height: 240px;
 	max-width: 100%;
-	height: auto;
+	width: auto;
 }
 
 .search-question-extend-sub-question{

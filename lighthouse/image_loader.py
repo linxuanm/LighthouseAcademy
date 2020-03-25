@@ -4,9 +4,10 @@ import os
 PATH = 'static/images/'
 
 
-def get_image(question_id: str, question_type):
-	file_path = os.path.join(PATH + question_type, question_id + '.png')
-	return file_path if (os.path.isfile(file_path)) else None
+def get_image(id_code: str, question_type):
+	file_path = os.path.join(PATH + question_type + "/", id_code + '.png')
+	print(file_path)
+	return file_path
 
 
 def save_image(file, question_id: str):

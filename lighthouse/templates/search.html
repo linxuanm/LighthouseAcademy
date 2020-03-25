@@ -17,7 +17,10 @@
 	</br>
 	<input type="checkbox" id="season-oct-nov" class="css-checkbox lrg">
 	<label for="season-oct-nov" class="css-label lrg"><span>October - November</span></label>
-	<h2>Subject:</h2>
+	<h2 style="margin-bottom: 10px;">Year:</h2>
+	<span><input type="text" class="search-filter-by-year"><span> to </span><input type="text" class="search-filter-by-year"></span>
+	<button>Apply</button>
+	<h2 style="margin-top: 14px;">Subject:</h2>
 	<input type="checkbox" id="subject-addmath" class="css-checkbox lrg">
 	<label for="subject-addmath" class="css-label lrg"><span>Additional Math</span></label>
 	<h2>Paper:</h2>
@@ -27,66 +30,86 @@
 	<input type="checkbox" id="paper-2" class="css-checkbox lrg">
 	<label for="paper-2" class="css-label lrg"><span>2</span></label>
 	</br>
-	<input type="checkbox" id="paper-4" class="css-checkbox lrg">
-	<label for="paper-4" class="css-label lrg"><span>4</span></label>
+	<h2>Chapter:</h2>
+	<input type="checkbox" id="chapter-1" class="css-checkbox lrg">
+	<label for="chapter-1" class="css-label lrg"><span>1</span></label>
 	</br>
-	<input type="checkbox" id="paper-6" class="css-checkbox lrg">
-	<label for="paper-6" class="css-label lrg"><span>6</span></label>
-	<h2 style="margin-bottom: 10px;">Year:</h2>
-	<span><input type="text" class="search-filter-by-year"><span> to </span><input type="text" class="search-filter-by-year"></span>
-	<button>Apply</button>
+	<input type="checkbox" id="chapter-2" class="css-checkbox lrg">
+	<label for="chapter-2" class="css-label lrg"><span>2</span></label>
+	</br>
+	
 </div>
 <div class="search-area">
 	<div class="search-main">
 		<h1 class="search-ti">Search</h1>
-		<input type="text" name="main-search"></input>
+		<input type="text" id="input-search"></input>
+		<button id="submit-search"><img src="/static/images/icons/search-solid.svg"></button>
 	</div>
+	{% for i in questions %}
 	<div class="search-result-space">
 		<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
 		<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
 		<div class="search-result-box">
-			<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
+			<p class="search-question-text-view">{{ i.text }} </p>
+			{% if i.has_image %}
 			<div class="search-question-details">
-				<p>Question ID: <span>s13-AddMat-1-2-0-5-6Z-E</span></p>
-				<p>Subject: <span>Additional Math</span></p>
-				<p>Season: <span>March</span></p>
-				<p>Year: <span>2019</span></p>
-				<p>Paper: <span>2</span></p>
+				<p>Question ID: <span>{{ i.id_code }}</span></p>
+				<p>Subject: <span>{{ i.attr_subject }}</span></p>
+				<p>Season: <span>{{ i.attr_season }}</span></p>
+				<p>Year: <span>{{ i.attr_year }}</span></p>
+				<p>Paper: <span>{{ i.attr_paper }}</span></p>
+				<p>Question: <span>{{ i.attr_question }}</span></p>
+				<p>Max Mark: <span>{{ i.attr_maxMark }}</span></p>
+				<p>Chapter: <span>{{ i.attr_chapter }}</span></p>
+				<p>Difficulty: <span>{{ i.attr_difficulty }}</span></p>
+			</div>
+			<div class="search-question-image">
+				<p>Question Image:</p>
+				<img src="{{ i.get_image_path() }}"></img>
+			</div>
+			{% else %}
+			<div class="search-question-details">
+				<p>Question ID: <span>{{ i.id_code }}</span></p>
+				<p>Subject: <span>{{ i.attr_subject }}</span></p>
+				<p>Season: <span>{{ i.attr_season }}</span></p>
+				<p>Year: <span>{{ i.attr_year }}</span></p>
+				<p>Paper: <span>{{ i.attr_paper }}</span></p>
 			</div>
 			<div class="search-question-details-right">
-				<p>Question: <span>6</span></p>
-				<p>Max Mark: <span>4</span></p>
-				<p>Chapter: <span>10E</span></p>
-				<p>Difficulty: <span>Easy</span></p>
+				<p>Question: <span>{{ i.attr_question }}</span></p>
+				<p>Max Mark: <span>{{ i.attr_maxMark }}</span></p>
+				<p>Chapter: <span>{{ i.attr_chapter }}</span></p>
+				<p>Difficulty: <span>{{ i.attr_difficulty }}</span></p>
 			</div>
 			</br>
+			{% endif %}
+			{% if i.has_subquestion %}
 			<p class="search-question-extend-sub-question">Expand Sub-Questions</p>
-			<div class="search-question-sub-question-space" style="display: none;">
-				<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
-				<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
-				<div class="search-question-sub-question-box">
-					<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
-					<div class="search-question-details">
-						<p>Sub Question # <span>1</span></p>
+			{% for j in sub_questions %}
+				{% if i.id == j.main_question_id %}
+				<div class="search-question-sub-question-space" style="display: none;">
+					<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
+					<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
+					<div class="search-question-sub-question-box" style="margin-left: 3px; width: 92%">
+						<p class="search-question-text-view" style="margin-top: 20px">{{ j.text }} </p>
+						<div class="search-question-details">
+							<p>Sub Question #<span>{{ j.sub_question_number }}</span></p>
+						</div>
+						{% if j.has_image %}
+						<div class="search-question-image">
+							<p>Question Image:</p>
+							<img src="{{ j.get_image_path() }}"></img>
+						</div>
+						{% endif %}
 					</div>
 				</div>
-			</div>
-			<div class="search-question-sub-question-space" style="display: none;">
-				<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
-				<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>
-				<div class="search-question-sub-question-box">
-					<p class="search-question-text-view">Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content Content </p>
-					<div class="search-question-details">
-						<p>Sub Question # <span>2</span></p>
-					</div>
-					<div class="search-question-image">
-						<p>Question Image:</p>
-						<img src="/static/images/test-question-image/test-image-1.png"></img>
-					</div>
-				</div>
-			</div>
+				{% endif %}
+			{% endfor %}
+			{% endif %}
+			
 		</div>
 	</div>
+	{% endfor %}
 	<div class="search-result-space">
 		<input type="checkbox" id="s13-AddMat-1-2-0-5-6Z-E" class="css-checkbox lrg">
 		<label for="s13-AddMat-1-2-0-5-6Z-E" class="css-label lrg"></label>

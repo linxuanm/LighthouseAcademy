@@ -25,6 +25,15 @@
 		$(".search-area").css("height",$(window).height() - 70);
 	});
 
+	$("#submit-search").on("click", function(){
+		window.location.replace("/search/" + $(this).siblings("input").val());
+	});
+
+	$("#input-search").on("keyup", function(e){
+		if (e.keyCode === 13) {
+			window.location.replace("/search/" + $(this).val());
+		}
+	})
 
 
 	bind_expand_sub_question($(".search-question-extend-sub-question"));

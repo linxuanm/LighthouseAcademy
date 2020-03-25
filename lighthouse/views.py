@@ -116,24 +116,41 @@ def add_qs():
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
-	uploaded_image = request.files.get('file');
-	uploaded_id_code = request.form.get('id_code');
-	uploaded_for_sub = int(request.form.get('for_sub_question'));
+	file = request.files.get('file');
+	id_code = request.form.get('id_code');
+	for_sub_question = int(request.form.get('for_sub_question'));
 	dirname = os.path.dirname(__file__)
-	if uploaded_for_sub == 0:
-		question = Question.query.filter_by(id_code = uploaded_id_code).first()
-		question_id = question.id
-		uploaded_image.save(os.path.join(dirname, "static/images/questions", str(question_id) + ".png"))
+	if for_sub_question == 0:
+		file.save(os.path.join(dirname, "static/images/questions", str(id_code) + ".png"))
 	else:
-		print(uploaded_for_sub)
-		question = Sub_Question.query.filter_by(id_code = uploaded_id_code, sub_question_number = uploaded_for_sub).first()
+		question = Sub_Question.query.filter_by(id_code = id_code, sub_question_number = for_sub_question).first()
 		question_id = question.id
-		uploaded_image.save(os.path.join(dirname, "static/images/sub_questions", str(question_id) + ".png"))
+		file.save(os.path.join(dirname, "static/images/sub_questions", str(id_code) + ".png"))
 	return "hi"
 
 @app.route('/search', methods=['GET'])
-def search():
-	return render_template('search.html', title='Search for a Question')
+def search_all():
+	questions = Question.query.all()
+	sub_questions = []
+	for i in questions:
+		if i.has_subquestion:
+			sub_questions.extend(Sub_Question.query.filter_by(main_question_id=i.id).all())
+	return render_template('search.html', title='Search for a Question', questions=questions, sub_questions=sub_questions)
+
+@app.route('/search/', methods=['GET'])
+def search_empty():
+	return redirect(url_for('search_all'))
+
+@app.route('/search/<query_string>', methods=['GET'])
+def search(query_string):
+	formated_query = '%' + query_string + '%'
+	questions = Question.query.filter(Question.text.like(formated_query) | Question.id_code.like(formated_query)).all()
+
+	sub_questions = []
+	for i in questions:
+		if i.has_subquestion:
+			sub_questions.extend(Sub_Question.query.filter_by(main_question_id=i.id).all())
+	return render_template('search.html', title='Search for a Question', questions=questions, sub_questions=sub_questions)
 
 @app.route('/generate_paper', methods=['GET'])
 def generate_paper():
