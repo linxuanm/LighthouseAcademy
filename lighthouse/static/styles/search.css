@@ -11,58 +11,38 @@ label {
 user-select: none;
 }
 
-.css-checkbox {
-	position: absolute; 
-	overflow: hidden; 
-	clip: rect(0 0 0 0); 
-	height:1px; 
-	width:1px; 
-	margin:-1px;
-	padding:0;
-	border:0;
-}
-
-.css-label {
-	padding-left:20px;
-	height:15px; 
-	display:block;
-	line-height:15px;
-	background-repeat:no-repeat;
-	background-position: 0 0;
-	font-size:15px;
-	vertical-align:middle;
-	cursor:pointer;
-	margin: 7px 4px;
-	background-image:url("/static/images/checkbox.png");
-}
-
-.css-checkbox:checked + label.css-label {
-	background-position: 0 -15px;
-}
-
-.css-checkbox.lrg + label.css-label.lrg {
-	padding-left:22px;
-	height:16px; 
-	display:inline-block;
-	line-height:16px;
-	background-repeat:no-repeat;
-	background-position: 0 0;
-	font-size:15px;
-	vertical-align:middle;
-	cursor:pointer;
-}
-
-.css-checkbox.lrg:checked + label.css-label.lrg{
-	background-position: 0 -16px;
+.diy-checkbox{
+	display: none
 }
 
 
-.search-filter{
-	width: 20%;
-	background-color: #39bded;
-	float: left;
-	padding-top: 70px;
-	padding-left: 20px;
+.diy-checkbox:checked + label:before{
+	background-image:url(/static/images/checked.png);
+	background-size: 14px 14px;
+	background-repeat: no-repeat;
+}
+
+.diy-checkbox + label:before{
+	position: relative;
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	border: 1px solid #808080;
+	content: "";
+	background: #FFF;
+	border-radius: 2px;
+	left: -19px;
+	top: 2px;
+	margin-right: -13px;
+	cursor: pointer;
+}
+
+.diy-checkbox + label{
+	display: block;
+	padding-left: 26px;
+	margin-bottom: 10px;
+	margin-right: 10px; 
+	line-height: 22px;
 }
 
 .search-filter h1{
@@ -82,20 +62,22 @@ user-select: none;
 	border-radius: 3px;
 	border: 1px solid #5FACFE;
 	color: #5FACFE;
+	padding: 3px 5px;
 }
 
 .search-filter-by-year{
-	width: 50px;
-	height: 15px;
-	line-height: 15px;
+	width: 40px;
+	padding: 3px 4px;
+	height: 14px;
+	line-height: 17px;
 	font-size: 12px;
-	border: 2px solid #eee;
+	border: 1px solid #666;
 	border-radius: 3px;
 }
 
 .search-area{
-	width: calc(80% - 85px);
-	padding: 70px 30px 0px 30px;
+	width: calc(75% - 85px);
+	padding: 70px 30px 0px 10px;
 	overflow-y: auto;
 	-ms-overflow-style: none;
 }
@@ -107,36 +89,13 @@ user-select: none;
 .search-main{
 	margin-top: 20px;
 	width: 100%;
-	height: 100px;
 	margin-bottom: 20px;
+	height: auto;
 }
 
 .search-main h1{
 	color: #5FACFE;
 	font-size: calc(30px + 0.6vw);
-}
-
-.search-main input{
-	width: 85%;
-	max-width: 640px;
-	line-height: 20px;
-	font-size: 20px;
-	padding: 10px 10px;
-	margin-top: 10px;
-	border-radius: 5px;
-	float: left;
-	border: 2px solid #e5e5e5;
-}
-
-.search-main button{
-	width: calc(10% - 10px);
-	max-width: 110px;
-	margin-top: 10px;
-	margin-left: 10px;
-	height: 46px;
-	border-radius: 5px;
-	float: left;
-	background-color: #5FACFE;
 }
 
 .search-main button img{
@@ -155,8 +114,13 @@ user-select: none;
 	position: relative;
 }
 
+
+.search-result-space label{
+	display: inline-block;
+}
+
 .search-result-box{
-	width: 90%;
+	width: calc(95% - 65px);
 	float: right;
 	border-top: 1px solid #bbb;
 	padding: 20px;
@@ -169,13 +133,19 @@ user-select: none;
 	line-height: 30px;
 	font-size: 20px;
 	text-overflow: ellipsis;
+	white-space: nowrap;
 	overflow: hidden;
 	font-family: arial;
 	width: 100%;
-	white-space: nowrap;
 }
 
 .search-question-details{
+	float: left;
+	width: 50%;
+	margin-bottom: 20px;
+}
+
+.search-sub-question-details{
 	float: left;
 	width: 50%;
 	margin-bottom: 20px;
@@ -190,6 +160,17 @@ user-select: none;
 .search-question-details p span{
 	color: #999;
 }
+
+.search-sub-question-details p span{
+	color: #999;
+}
+
+.search-sub-question-details p{
+	color: #5FACFE;
+	margin-top: 10px;
+	font-size: 15px;
+}
+
 
 .search-question-details-right{
 	float: right;
@@ -242,12 +223,173 @@ user-select: none;
 	overflow: auto;
 }
 
+.search-question-sub-question-space label{
+	display: inline-block;
+}
+
 
 .search-question-sub-question-box{
-	width: calc(100% - 30px);
+	width: calc(95% - 65px);
 	float: right;
 	min-height: 100px;
 	border-top: 1px solid #bbb;
+	display: inline-block;
 }
 
+.search-empty-result-hint{
+	font-style: italic;
+	color: #777;
+}
+
+.nav-button{
+	width: 20%;
+	max-width: 150px;
+	height: 40px;
+	float: right;
+	margin-right: 20px;
+	margin-top: 15px;
+	border-radius: 3px;
+	cursor: pointer;
+	color: #fff;
+	border: none;
+	font-size: 15px;
+}
+
+.nav-counting-hint{
+	float: right;
+	color: #fff;
+	line-height: 70px;
+	margin-right: 10px;
+	display: none;
+}
+
+#question_count{
+	color: #fc0373;
+	font-style: italic;
+}
+
+#sub_question_count{
+	color: #9c6777;
+	font-style: italic;
+}
+
+.display-settings-checkbox{
+}
+.display-settings-checkbox + label{
+	display: inline-block;
+}
+#delete_selected_questions{
+	background-color: #f00;
+}
+
+#generate_selected_questions{
+	background-color: #3ac9a1;
+}
+
+.display-settings{
+	width: 100%;
+	max-width: 800px;
+	padding: 14px 0px;
+	border-radius: 5px;
+	border: 1px solid #ddd;
+	margin-bottom: 20px;
+}
+
+.display-settings span{
+	color: #5FACFE;
+	cursor: pointer;
+}
+
+.display-settings img{
+	cursor: pointer;
+}
+
+/*Start of media*/
+
+.search-filter{
+	background-color: #39bded;
+	float: left;
+	padding-left: 20px;
+	margin: 100px 10px;
+	border-radius: 3px;
+}
+
+.search-area{
+	width: calc(75% - 85px);
+	padding: 70px 30px 0px 10px;
+	overflow-y: auto;
+	-ms-overflow-style: none;
+}
+
+.search-main input{
+	max-width: 640px;
+	line-height: 20px;
+	font-size: 20px;
+	padding: 10px 10px;
+	border-radius: 5px;
+	margin-top: 10px;
+	display: inline-block;
+	border: 2px solid #e5e5e5;
+}
+
+.search-main button{
+	position: relative;
+	top: 3px;
+	margin-top: 7px;
+	height: 50px;
+	border-radius: 5px;
+	cursor: pointer;
+	display: inline-block;
+	background-color: #5FACFE;
+}
+
+@media only screen and (max-width: 800px){
+	.search-filter{
+		width: calc(100% - 20px);
+		background-color: #39bded;
+		padding: 0px 5px;
+		margin: 90px 5px 0px 5px;
+	}
+
+	.search-area{
+		width: calc(100% - 20px);
+		padding: 0px 5px;
+		overflow-y: auto;
+		-ms-overflow-style: none;
+	}
+
+	.search-main input{
+		width: calc(100% - 20px);
+	}
+
+	.search-main button{
+		width: 100%;
+	}
+}
+
+@media only screen and (min-width: 800px){
+	.search-filter{
+		width: 25%;
+		background-color: #39bded;
+		padding-left: 20px;
+		margin: 100px 10px;
+	}
+
+	.search-area{
+		width: calc(75% - 85px);
+		padding: 70px 30px 0px 10px;
+		overflow-y: auto;
+		-ms-overflow-style: none;
+	}
+
+	.search-main input{
+		width: calc(85% - 25px);
+	}
+
+	.search-main button{
+		width: calc(15% - 15px);
+		max-width: 100px;
+		margin-left: 10px;
+	}
+}
 

@@ -438,7 +438,7 @@ var image_array = [];
 				var for_sub_question = 0
 			}
 			id_code = main_question_id_code.replace("-0-", "-" + for_sub_question + "-")
-			params.mark[mark_count] = {text:text,question_id:question_id,order:order,mark:mark,id_code:id_code,for_sub_question:for_sub_question,main_question_id_code:main_question_id_code} //for_sub_question will not be inserted in to the database
+			params.mark[mark_count] = {text:text,question_id:question_id,order:order,mark:mark,id_code:id_code,for_sub_question:for_sub_question,main_question_id_code:main_question_id_code}
 			mark_count ++
 		})
 

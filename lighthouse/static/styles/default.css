@@ -4,7 +4,7 @@
 }
 
 ::placeholder {
-	color: #EEE;
+	color: #DDD;
 	font-size: 15px;
 }
 
@@ -13,6 +13,11 @@
 	background-color: #5FACFE;
 	position: fixed;
 	z-index: 1;
+}
+
+#nav-bar img {
+	margin: 10px 20px;
+	float: left;
 }
 
 ul {

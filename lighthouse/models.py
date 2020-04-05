@@ -85,7 +85,7 @@ class Question(db.Model):
 		elif re.search(r'(?:-(\w+)){7}', id_code).group(1) == 'M':
 			difficulty = 'Medium'
 		else:
-			difficulty = 'Hard'
+			difficulty = 'Difficult'
 		self.attr_difficulty = difficulty
 
 		self.attr_year = '20{}'.format(id_code[1:3])
@@ -99,6 +99,17 @@ class Question(db.Model):
 	def get_image_path(self):
 		return get_image(self.id_code, "questions")
 
+	def asdict(self):
+		return {
+		"attr_subject":self.attr_subject, 
+		"attr_season":self.attr_season, 
+		"attr_year":self.attr_year, 
+		"attr_paper":self.attr_paper, 
+		"attr_question": self.attr_question, 
+		"attr_maxMark": self.attr_maxMark, 
+		"attr_chapter": self.attr_chapter,
+		"attr_difficulty": self.attr_difficulty
+		}
 
 class Sub_Question(db.Model):
 
@@ -122,7 +133,7 @@ class Sub_Question(db.Model):
 		return get_image(self.id_code, "sub_questions")
 
 	def get_main_question(self):
-		return Question.query.filter_by(id=self.id).first()
+		return Question.query.filter_by(id=self.main_question_id).first()
 
 class Mark(db.Model):
 

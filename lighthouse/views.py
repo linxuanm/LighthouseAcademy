@@ -1,12 +1,12 @@
 from lighthouse import app, db, login_manager
 from lighthouse.models import User, Question, Sub_Question, Mark
-from lighthouse.db_helper import db_entry_exists, str2bool
+from lighthouse.db_helper import db_entry_exists, str2bool, delete_questions_without_field
 from lighthouse.interactions import (
 	info,
 	error,
 	verify_email_request,
 	render_user_template,
-	redirect_to
+	redirect_to,
 )
 
 from constants import EMAIL_REGEX
@@ -128,28 +128,45 @@ def upload_image():
 		file.save(os.path.join(dirname, "static/images/sub_questions", str(id_code) + ".png"))
 	return "hi"
 
-@app.route('/search', methods=['GET'])
-def search_all():
-	questions = Question.query.all()
+@app.route('/search', methods=['GET','POST'])
+def search():
+	if request.args.get("search") == '' or not request.args.get("search"):
+		questions = Question.query.all()
+	else:
+		user_query = request.args.get("search")
+		formated_query = '%' + user_query + '%'
+		questions = Question.query.filter(Question.text.like(formated_query) | Question.id_code.like(formated_query)).all()
+		queried_sub_questions = Sub_Question.query.filter(Sub_Question.text.like(formated_query) | Sub_Question.id_code.like(formated_query)).all()
+
+		queried_sub_questions_main_question = []
+		for i in queried_sub_questions:
+			queried_sub_questions_main_question.append(i.get_main_question())
+		questions = list(set(questions) | set(queried_sub_questions_main_question))
+
+	if request.args.get("season"):
+		filter_season = request.args.get("season").split(",")
+		questions = delete_questions_without_field(questions, filter_season, "attr_season")
+	if request.args.get("paper"):
+		filter_paper = request.args.get("paper").split(",")
+		questions = delete_questions_without_field(questions, filter_paper, "attr_paper")
+	if request.args.get("chapter"):
+		filter_chapter = request.args.get("chapter").split(",")
+		questions = delete_questions_without_field(questions, filter_chapter, "attr_chapter")
+	if request.args.get("difficulty"):
+		filter_difficulty = request.args.get("difficulty").split(",")
+		questions = delete_questions_without_field(questions, filter_difficulty, "attr_difficulty")
+
+	
+
 	sub_questions = []
-	for i in questions:
-		if i.has_subquestion:
-			sub_questions.extend(Sub_Question.query.filter_by(main_question_id=i.id).all())
-	return render_template('search.html', title='Search for a Question', questions=questions, sub_questions=sub_questions)
-
-@app.route('/search/', methods=['GET'])
-def search_empty():
-	return redirect(url_for('search_all'))
-
-@app.route('/search/<query_string>', methods=['GET'])
-def search(query_string):
-	formated_query = '%' + query_string + '%'
-	questions = Question.query.filter(Question.text.like(formated_query) | Question.id_code.like(formated_query)).all()
-
-	sub_questions = []
-	for i in questions:
-		if i.has_subquestion:
-			sub_questions.extend(Sub_Question.query.filter_by(main_question_id=i.id).all())
+	if len(questions) != 0:
+		empty_result = False
+		for i in questions:
+			if i.has_subquestion:
+				sub_questions.extend(Sub_Question.query.filter_by(main_question_id=i.id).all())
+	else:
+		empty_result = True
+	
 	return render_template('search.html', title='Search for a Question', questions=questions, sub_questions=sub_questions)
 
 @app.route('/generate_paper', methods=['GET'])

@@ -1,7 +1,7 @@
 import os
 
 
-PATH = 'static/images/'
+PATH = '../static/images/'
 
 
 def get_image(id_code: str, question_type):
