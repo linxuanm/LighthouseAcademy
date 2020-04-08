@@ -1,2 +1,6 @@
 *.db
 __pycache__/*
+lighthouse/__pycache__/*
+venv/*
+lighthouse/static/images/questions/*
+lighthouse/static/images/sub_questions/*
