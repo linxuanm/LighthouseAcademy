@@ -64,30 +64,28 @@ class Question(db.Model):
 	attr_difficulty = db.Column(db.String(5), nullable=False)
 
 	def __init__(self, text, id_code, has_image, has_subquestion):
-		self.text = text
-		self.id_code = id_code
-		self.has_image = has_image
-		self.has_subquestion = has_subquestion
-
 		if re.search(r'(?:-(\w+)){1}', id_code).group(1) == 'AddMat':
-			self.attr_subject = 'Additional Mathematics'
-
+			subject = 'Additional Mathematics'
 		if id_code[:1] == 'm':
 			season = 'March'
 		elif id_code[:1] == 's':
 			season = 'May-June'
 		else:
 			season = 'November'
-		self.attr_season = season
-
 		if re.search(r'(?:-(\w+)){7}', id_code).group(1) == 'E':
 			difficulty = 'Easy'
 		elif re.search(r'(?:-(\w+)){7}', id_code).group(1) == 'M':
 			difficulty = 'Medium'
 		else:
 			difficulty = 'Difficult'
-		self.attr_difficulty = difficulty
 
+		self.attr_subject = subject
+		self.attr_difficulty = difficulty
+		self.attr_season = season
+		self.text = text
+		self.id_code = id_code
+		self.has_image = has_image
+		self.has_subquestion = has_subquestion
 		self.attr_year = '20{}'.format(id_code[1:3])
 		self.attr_paper = re.search(r'(?:-(\w+)){2}', id_code).group(1)
 		self.attr_question = re.search(r'(?:-(\w+)){3}', id_code).group(1)

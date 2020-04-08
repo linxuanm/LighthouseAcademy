@@ -168,13 +168,13 @@
 	});
 
 
-	//Initinalize Cookies if not defined
+	//Initinalize Cookies if not initialized
 	if (typeof Cookies.get("selected_questions") === "undefined") {
 		Cookies.set("selected_questions", JSON.stringify([]))
 		Cookies.set("selected_sub_questions", JSON.stringify([]))
 	}
 
-	//Tick all question that already selected when reloading the page
+	//Tick all question that is already selected when reloading the page
 	var selected_questions = JSON.parse(Cookies.get("selected_questions"))
 	var selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
 	$("input").each(function(){
@@ -199,9 +199,11 @@
 
 	update_question_count()
 
-	//Detect user ticking questions and add questions to a array selected_questions and selected sub_questions
-	//Automatically check/uncheck the sub questions when checking/unchecking the main question
+	//Detect user ticking questions and add questions to array selected_questions and selected sub_questions
+
 	$(".search-result-space").children("input").on("click",function(){
+		//Event Listierns for main question checkbox
+		//Automatically check/uncheck the sub questions when checking/unchecking the main question
 		var selected_questions = JSON.parse(Cookies.get("selected_questions"))
 		var selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
 
@@ -215,7 +217,6 @@
 			})
 			selected_sub_questions.push.apply(selected_sub_questions, waiting_to_be_add)
 			Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
-			update_question_count()
 		}else{
 			var id = $(this).attr("id")
 			selected_questions = selected_questions.filter(function(e){ return e !== id})
@@ -228,41 +229,82 @@
 				$(this).prop("checked", false)
 			})
 			Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
-			update_question_count()
 		}
+		update_question_count()
 	})
+
 	$(".search-question-sub-question-space").children("input").on("click", function(){
+		//Event Listener for sub questions checkbox
 		var selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
 		if ($(this).is(":checked")) {
 			selected_sub_questions.push($(this).attr("id"))
 			Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
-			update_question_count()
 		}else{
 			var id = $(this).attr("id")
 			selected_sub_questions = selected_sub_questions.filter(function(e){ return e !== id})
 			Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
-			update_question_count()
+		}
+		update_question_count()
+	})
+
+	//Hide next page or prev page text according to current page
+	var current_page_num = parseInt($(".current-page").text())
+	var total_page_num = parseInt($(".total-page").text())
+	if (current_page_num == 1) {
+		$(".page-prev").toggle()
+	}
+	if(current_page_num == total_page_num){
+		$(".page-next").toggle()
+	}
+
+	//Next page and prev page on click event
+	var page_query_string_pattern = /page=[0-9]+/
+	$(".page-next, .page-prev").on("click", function(){
+		if ($(this).hasClass("page-next")) {
+			var next_page_number = current_page_num + 1
+		}else{
+			var next_page_number = current_page_num - 1
+		}
+		if (window.location.search !== "") {
+			var current_path = window.location.pathname + window.location.search
+			if (current_path.match(page_query_string_pattern)) {
+				window.location.replace(current_path.replace(current_path.match(page_query_string_pattern), "page=" + next_page_number))
+			}else{
+				window.location.replace(current_path + "&page=" + next_page_number)
+			}
+		}else{
+			window.location.replace(window.location.pathname + "?page=" + next_page_number)
 		}
 	})
 
 	//Delete Question from database
 	$("#delete_selected_questions").on("click", function(){
 		if (confirm("You are about to delete " + selected_questions.length + " questions and " + selected_sub_questions.length + " sub-questions")) {
-			formdata = new FormData()
-			formdata.append("purpose", "delete")
-			formdata.append("questions_to_delete", selected_questions)
-			formdata.append("sub_questions_to_delete", selected_sub_questions)
+			var questions_to_delete = JSON.parse(Cookies.get("selected_questions"))
+			var sub_questions_to_delete = JSON.parse(Cookies.get("selected_sub_questions"))
+			to_delete = JSON.stringify({questions:questions_to_delete, sub_questions:sub_questions_to_delete})
+
 			$.ajax({
-				type: 'POST',
-				url:  window.location.pathname,
-				data: formdata,
-				contentType: false,
-				cache: false,
-				processData: false,
-				success: function(data) {
-					console.log("hi")
-				},
-			});
+				url: "/delete_questions",
+				type: "POST",
+				data: to_delete,
+				contentType: "application/json; charset=utf-8",
+				success: function(){
+					selected_questions = JSON.parse(Cookies.get("selected_questions"))
+					selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
+					selected_questions.forEach(function(item, index){
+						selected_questions = selected_questions.filter(function(e){ return e !== item})
+					})
+					selected_sub_questions.forEach(function(item, index){
+						selected_sub_questions = selected_sub_questions.filter(function(e){ return e !== item})
+					})
+					Cookies.set("selected_questions", JSON.stringify(selected_questions))
+					Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
+					window.location.replace(window.location.pathname + window.location.search)
+					alert("Success")
+				}
+			})
+			
 		}
 	})
 

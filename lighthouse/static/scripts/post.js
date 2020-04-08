@@ -28,30 +28,21 @@ function responsive_post(url, params) {
 							formdata.append("file",item[0])
 							formdata.append("id_code",id_code.replace("-0-", "-" + item[2] + "-"))
 							formdata.append("for_sub_question",item[2])
-							if (index == image_array.length - 1) {
-								$.ajax({
-									type: 'POST',
-									url:  '/upload_image',
-									data: formdata,
-									contentType: false,
-									cache: false,
-									processData: false,
-									success: function(data) {
+							$.ajax({
+								type: 'POST',
+								url:  '/upload_image',
+								data: formdata,
+								contentType: false,
+								cache: false,
+								processData: false,
+								success: function(data) {
+									if (index == image_array.length - 1) {
 										$("#submit-button").html("Uploaded " + image_array.length + " image")
-									},
-								});
-							}else{
-								$.ajax({
-									type: 'POST',
-									url:  '/upload_image',
-									data: formdata,
-									contentType: false,
-									cache: false,
-									processData: false,
-									success: function(data) {
-									},
-								});
-							}
+									}else{
+										$("#submit-button").html("Uploaded " + image_array.length + " image. Upload Success")
+									}
+								},
+							});
 						})
 					}else{
 						$("#submit-button").html("Upload Success")

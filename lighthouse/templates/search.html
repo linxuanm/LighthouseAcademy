@@ -83,18 +83,18 @@
 		<input type="text" id="input-search" placeholder="Search Question ID or Question Content"></input>
 		<button id="submit-search"><img src="/static/images/icons/search-solid.svg"></button>
 	</div>
-	<div class="display-settings">		
-		<input type="checkbox" id="show_sub_questions" class="diy-checkbox display-settings-checkbox">
-		<label for="show_sub_questions"><span>Always Show Sub Questions</span></label>
-		<input type="checkbox" id="show_mark" class="diy-checkbox display-settings-checkbox">
-		<label for="show_mark"><span>Always Show Mark Scheme</span></label>
-		</br>
-		<img src="/static/images/icons/sort-solid.svg" height="15px" width="15px" style="margin-left: 5px;" id="sort_by_year"><span>Sort By Year</span>
-		<img src="/static/images/icons/sort-solid.svg" height="15px" width="15px" id="sort_by_mark"><span>Sort By Max Mark</span>
-	</div>
-	{% if empty_result %}
-	<p class="search-empty-result-hint">Sorry, But No Question Content or Question ID in the Question Bank Matches Your Search</p>
+	{% if error_message %}
+	<p class="search-empty-result-hint">{{ error_message }}</p>
 	{% else %}
+		<div class="display-settings">		
+			<input type="checkbox" id="show_sub_questions" class="diy-checkbox display-settings-checkbox">
+			<label for="show_sub_questions"><span>Always Show Sub Questions</span></label>
+			<input type="checkbox" id="show_mark" class="diy-checkbox display-settings-checkbox">
+			<label for="show_mark"><span>Always Show Mark Scheme</span></label>
+			</br>
+			<img src="/static/images/icons/sort-solid.svg" height="15px" width="15px" style="margin-left: 5px;" id="sort_by_year"><span>Sort By Year</span>
+			<img src="/static/images/icons/sort-solid.svg" height="15px" width="15px" id="sort_by_mark"><span>Sort By Max Mark</span>
+		</div>
 		{% for i in questions %}
 		<div class="search-result-space">
 			<input type="checkbox" id="{{ i.id_code }}" class="diy-checkbox">
@@ -159,6 +159,9 @@
 			</div>
 		</div>
 		{% endfor %}
+		<div class="page-action">
+			<p><span class="page-prev page-act">Prev</span> Page <span class="current-page">{{ current_page }}</span> of <span class="total-page">{{ total_page }} </span><span class="page-next page-act">Next</span></p>
+		</div>
 	{% endif %}
 </div>
 {% endblock %}

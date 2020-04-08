@@ -204,7 +204,6 @@ var image_array = [];
 	}
 
 	function reassign_sub_question_ms_id(parent_of_ms_blocks){
-		console.log(parent_of_ms_blocks.find(".add-qs-ms-sub-question-space").length)
 		for (var i = 0; i <= parent_of_ms_blocks.find(".add-qs-ms-sub-question-space").length - 1; i++) {
 			var block = parent_of_ms_blocks.find(".add-qs-ms-sub-question-space:eq(" + (i) + ")");
 			var answer_block = block.find(".add-qs-ms-answer-block");
@@ -212,7 +211,6 @@ var image_array = [];
 			for (var j = 0; j <= answer_block.find(".add-qs-ms-answer-space").length - 1; j++) {
 				var space = answer_block.find(".add-qs-ms-answer-space:eq(" + j + ")");
 				var new_id = space.find("textarea").attr("id").replace((/(?:sub-)([0-9]+)/), "sub-" + (i + 1));
-				console.log(new_id)
 				space.find("textarea").attr("id",new_id);
 
 			}
@@ -311,7 +309,7 @@ var image_array = [];
 		var bad_credit_regex = []
 
 		var id_code_regex = /^[msw][10][0-9]-AddMat-[12]{1}-(\d{2}|\d{1})-0-(\d{2}|\d{1})-(\d{2}|\d{1})-[EDM]$/
-		var credit_regex = /^[a-zA-Z][0-9]$/
+		var credit_regex = /^(([a-zA-Z]{1}|[a-zA-Z]{2})[0-9](?:\s|$))+$/
 		
 
 		$(".add-qs-question-input").each(function(){
@@ -509,7 +507,6 @@ var image_array = [];
 								var for_sub_question = 0
 							}
 							image_array.push([target_file,question_id, for_sub_question]);
-							console.log(image_array)
 						}
 					}
 				}
