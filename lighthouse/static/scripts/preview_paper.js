@@ -1,19 +1,19 @@
 (function($) {
 
 	function bind_delete_id_in_preview(){    //Use this function once any addition occurs to the id preview section
-		$(".preview-preview").find("img").on("click", function(){
+		$(".preview").find("img").on("click", function(){
 			$(this).parent().remove();
 		});
 	}
 
 	bind_delete_id_in_preview()
 
-	$(".preview-preview").css("height",$(window).height() - 70);
-	$(".preview-main").css("height",$(window).height() - 70);
+	$(".preview").css("height",$(window).height() - 70);
+	$(".main").css("height",$(window).height() - 70);
 
 	$(window).resize(function(){
-		$(".preview-preview").css("height",$(window).height() - 70);
-		$(".preview-main").css("height",$(window).height() - 70);
+		$(".preview").css("height",$(window).height() - 70);
+		$(".main").css("height",$(window).height() - 70);
 	});
 
 	/* Made with love by @fitri
@@ -55,6 +55,6 @@
 		item.target.classList.remove('drag-sort-active');
 	}
 
-	(()=> {enableDragSort('preview-preview-id')})();
+	(()=> {enableDragSort('sort-items')})();
 
 })(jQuery);

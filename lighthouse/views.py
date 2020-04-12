@@ -8,6 +8,7 @@ from lighthouse.interactions import (
 	render_user_template,
 	redirect_to,
 	search_error_response,
+	http_error_response,
 )
 
 from constants import EMAIL_REGEX, QUESTION_ID_CODE_REGEX, MARK_REGEX
@@ -127,6 +128,8 @@ def add_qs():
 		if "sub_questions" in key and "text" in key:
 			series_id = key[0:-6]
 			main_question_id_code = data.get("{}[main_question_id_code]".format(series_id))
+
+			# Get this sub_questions' main question id code
 			main_question = Question.query.filter_by(id_code = main_question_id_code).first()
 			main_question_id = main_question.id
 
@@ -134,7 +137,7 @@ def add_qs():
 				data.get(key), 
 				data.get("{}[id_code]".format(series_id)), 
 				str2bool(data.get("{}[has_image]".format(series_id))), 
-				main_question_id, int(data.get("{}[sub_question_number]".format(series_id)))
+				main_question_id
 				)
 			new_sub_question.append(sub_question)
 	for i in new_sub_question:
@@ -146,20 +149,11 @@ def add_qs():
 		if "mark" in key and "text" in key:
 			series_id = key[0:-6]
 			main_question_id_code = data.get("{}[id_code]".format(series_id))
-			for_sub_question = int(data.get("{}[for_sub_question]".format(series_id)))
-			if for_sub_question == 0:
-				question = Question.query.filter_by(id_code = main_question_id_code).first()
-				question_id = question.id
-				for_sub_question = False
-			else:
-				question = Sub_Question.query.filter_by(id_code = data.get("{}[id_code]".format(series_id)), sub_question_number = for_sub_question).first()
-				question_id = question.id
-				for_sub_question = True
 			mark = Mark(data.get(key), 
 				data.get("{}[mark]".format(series_id)), 
 				data.get("{}[id_code]".format(series_id)), 
-				question_id, int(data.get("{}[order]".format(series_id))), 
-				for_sub_question
+				int(data.get("{}[order]".format(series_id))),
+				str2bool(data.get("{}[has_image]".format(series_id))),
 				)
 			new_mark.append(mark)
 	for i in new_mark:
@@ -171,16 +165,18 @@ def add_qs():
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
-	file = request.files.get('file');
-	id_code = request.form.get('id_code');
-	for_sub_question = int(request.form.get('for_sub_question'));
+	file = request.files.get('file')
+	id_code = request.form.get('id_code')
 	dirname = os.path.dirname(__file__)
-	if for_sub_question == 0:
-		file.save(os.path.join(dirname, "static/images/questions", str(id_code) + ".png"))
+
+	if request.form.get('order'):
+		order = request.form.get('order')
+		file.save(os.path.join(dirname, "static/images/marks", str(id_code) + " " + order + ".png"))
 	else:
-		question = Sub_Question.query.filter_by(id_code = id_code, sub_question_number = for_sub_question).first()
-		question_id = question.id
-		file.save(os.path.join(dirname, "static/images/sub_questions", str(id_code) + ".png"))
+		if int(re.search(r'(?:-(\w+)){4}', id_code).group(1)) == 0:
+			file.save(os.path.join(dirname, "static/images/questions", str(id_code) + ".png"))
+		else:
+			file.save(os.path.join(dirname, "static/images/sub_questions", str(id_code) + ".png"))
 	return "hi"
 
 @app.route('/search', methods=['GET','POST'])
@@ -254,26 +250,53 @@ def search():
 def delete_questions():
 	#IMPORTANT TO DO:
 	#CHECK IF USER REALLY HAS THE RIGHT TO DELETE QUESTION!!!
-	questions_to_delete = request.get_json()["questions"]
-	sub_questions_to_delete = request.get_json()["sub_questions"]
-	for i in questions_to_delete:
-		question = Question.query.filter_by(id_code=i).first()
-		if question is not None:
-			db.session.delete(question)
-	for i in sub_questions_to_delete:
-		sub_question = Sub_Question.query.filter_by(id_code=i).first()
-		if sub_question is not None:
-			db.session.delete(sub_question)
-	db.session.commit()
-	return jsonify({"code":3})
+	if request.method == 'POST':
+		if request.cookies.get('selected_questions'):
+			selected_questions = json.loads(request.cookies.get('selected_questions'))
+			for i in selected_questions:
+				question = Question.query.filter_by(id_code=i).first()
+				if question is not None:
+					db.session.delete(question)
+		if request.cookies.get('selected_sub_questions'):
+			selected_sub_questions = json.loads(request.cookies.get('selected_questions'))
+			for i in selected_sub_questions:
+				sub_question = Question.query.filter_by(id_code=i).first()
+				if sub_question is not None:
+					db.session.delete(sub_question)
+		db.session.commit()
+		return jsonify({"code":3})
+	return http_error_response(402)
 
-@app.route('/generate_paper', methods=['GET'])
+@app.route('/generate_paper', methods=['GET', 'POST'])
 def generate_paper():
+
 	return render_template('generate_paper.html', title='Generate Papers')
 
-@app.route('/preview_paper', methods=['GET'])
+@app.route('/preview_paper', methods=['GET', 'POST'])
 def preivew_paper():
-	return render_template('preview_paper.html', title='Preview Paper')
+	selected_questions = json.loads(request.cookies.get('selected_questions'))
+	questions = []
+	for i in selected_questions:
+		questions.append(Question.query.filter_by(id_code=i).first())
+	selected_sub_questions = json.loads(request.cookies.get('selected_sub_questions'))
+	sub_questions = []
+	for i in selected_sub_questions:
+		sub_questions.append(Sub_Question.query.filter_by(id_code=i).first())
+
+	#Get max mark
+	total_mark = 0
+	for i in questions:
+		for j in i.get_all_mark():
+			total_mark += j.get_maxMark()
+	for i in sub_questions:
+		for j in i.get_all_mark():
+			total_mark += j.get_maxMark()
+
+	if len(questions) == 0 and len(sub_questions) == 0:
+		return http_error_response(401)
+	else:
+		return render_template('preview_paper.html', title='Preview Paper', questions=questions, sub_questions=sub_questions, total_mark=total_mark )
+	
 
 @app.route('/user/<user_id>')
 def user(user_id):

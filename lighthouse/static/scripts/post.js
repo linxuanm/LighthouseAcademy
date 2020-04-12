@@ -24,10 +24,14 @@ function responsive_post(url, params) {
 						image_array.forEach(function(item, index){
 							formdata = new FormData()
 							id = item[1]
-							id_code = $("#" + id + "").parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
+							console.log(conversion_id.indexOf(id))
+							console.log(conversion_id)
+							id_code = conversion_id_code[conversion_id.indexOf(id)]
 							formdata.append("file",item[0])
-							formdata.append("id_code",id_code.replace("-0-", "-" + item[2] + "-"))
-							formdata.append("for_sub_question",item[2])
+							formdata.append("id_code",id_code)
+							if (id.indexOf("") !== 1) {
+								formdata.append("order", conversion_order[conversion_id.indexOf(id)])
+							}
 							$.ajax({
 								type: 'POST',
 								url:  '/upload_image',
@@ -47,6 +51,10 @@ function responsive_post(url, params) {
 					}else{
 						$("#submit-button").html("Upload Success")
 					}
+					image_array = []
+					conversion_id_code = []
+					conversion_id = []
+					conversion_order = []
 					break;
 			}
 		},

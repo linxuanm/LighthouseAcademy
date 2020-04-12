@@ -23,6 +23,6 @@ def delete_questions_without_field(questions, field_array, field):
 	for i in questions:
 		if i.asdict().get(field) not in field_array:
 			index_list.append(index)
-		index = index + 1
+		index += 1
 	processed_questions = [i for j, i in enumerate(questions) if j not in index_list]
 	return processed_questions

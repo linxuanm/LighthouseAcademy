@@ -6,16 +6,22 @@
 {% endblock %}
 
 {% block content %}
-<div class="preview-preview">
-	<h1>Sort the Questions</h1>
-	<div class="preview-preview-id">
-		<div class="preview-question-thumbnail"><span>1</span><img src="/static/images/icons/times-solid-blue.svg"></img></div>
-		<div class="preview-question-thumbnail"><span>2</span><img src="/static/images/icons/times-solid-blue.svg"></img></div>
-		<div class="preview-question-thumbnail"><span>3</span><img src="/static/images/icons/times-solid-blue.svg"></img></div>
+<div class="sort-container">
+	<p>Sort Questions</p>
+	<div class="sort-info">
+		<p><span>Total Marks:</span> {{ total_mark }}</p>
+	</div>
+	<div class="sort-items">
+		{% for i in questions %}
+		<div class="question-thumbnail"><span>{{ i.id_code }}</span><img style="display: none" src="/static/images/icons/times-solid-blue.svg"></img></div>
+		{% endfor %}
+		{% for i in sub_questions %}
+		<div class="question-thumbnail"><span>{{ i.id_code }}</span><img style="display: none" src="/static/images/icons/times-solid-blue.svg"></img></div>
+		{% endfor %}
 	</div>
 </div>
-<div class="preview-main">
-	<div class="preview-document">
+<div class="main">
+	<div class="document">
 		<object type="application/pdf" data="/static/images/test-question-image/0606_m19_qp_22.pdf">
 		<p>Insert your error message here, if the PDF cannot be displayed.</p>
 	</object>

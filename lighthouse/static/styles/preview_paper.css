@@ -1,40 +1,61 @@
-.preview-preview{
-	float: left;
-	width: 20%;
-	padding-top: 70px;
-	border-right: 1px solid #5FACFE;
+.sort-container{
+	display: flex;
+	height: 100%;
+	background-color: #424874;
+	flex-direction: column;
+	width: 400px;
+	border-radius: 4px;
+	margin-left: 15px;
+	top: 90px;
+	position: relative;
+	padding-top: 20px;
 }
 
-.preview-preview h1{
+.sort-container p{
 	text-align: center;
-	color: #5FACFE;
-	font-size: calc(20px + 0.2vw);
-	margin: 15px 0px;
+	font-size: 30px;
+	color: #fff;
 }
 
-.preview-preview-id::-webkit-scrollbar {
+.sort-container p span{
+	color: #84A9AC;
+}
+
+.sort-info{
+	margin: 7px 7px;
+}
+
+.sort-info p{
+	text-align: right;
+	background-color: #424874;
+	color: #fff;
+	font-size: 20px;
+}
+
+.sort-items::-webkit-scrollbar {
 	display: none;
 }
 
-.preview-question-thumbnail{
+.question-thumbnail{
 	height: 40px;
 	width: 100%;
-	border-top: 1px solid #5FACFE;
+	border-bottom: 1px solid #204051;
+	background-color: #F4EEFF;
 	cursor: pointer;
 }
 
-.preview-question-thumbnail:last-child{
-	border-bottom: 1px solid #5FACFE;
+.question-thumbnail:first-child{
+	border-top: 1px solid #204051;
 }
 
-.preview-question-thumbnail span{
+.question-thumbnail span{
 	line-height: 40px;
 	margin-left: 7px;
 	float: left;
-	color: #5FACFE
+	color: #3B6978;
 }
 
-.preview-question-thumbnail img{
+.question-thumbnail img{
 	float: right;
 	height: 16px;
 	width: 16px;
@@ -43,28 +64,14 @@
 	cursor: pointer;
 }
 
-.preview-main{
+.main{
 	float: right;
-	width: calc(80% - 40px);
+	width: calc(60% - 40px);
 	position: relative;
 	text-align: center;
 }
 
-.preview-document{
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	height: 80%;
-	width: 70%;
-	transform: translate(-50%, -50%);
-}
-
-.preview-document object{
-	height: 100%;
-	width: 100%;
-}
-
-.preview-main button{
+.main button{
 	width: 150px;
 	height: 50px;
 	margin-top: 20px;
@@ -74,3 +81,18 @@
 	color: #fff;
 	cursor: pointer;
 }
+
+.document{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: 80%;
+	width: 70%;
+	transform: translate(-50%, -50%);
+}
+
+.document object{
+	height: 100%;
+	width: 100%;
+}
+

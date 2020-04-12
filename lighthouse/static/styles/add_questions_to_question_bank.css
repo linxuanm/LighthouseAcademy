@@ -113,7 +113,7 @@
 }
 
 .add-qs-trash{
-	float: right;
+	float: left;
 	height: 17px;
 	width: 17px;
 	width: auto;
@@ -245,6 +245,7 @@
 	width: calc(95% - 20px;);
 	min-height: 100px;
 	padding-left: calc(20px + 5%);
+	margin-top: 20px;
 }
 
 .add-qs-sub-question-topbar{

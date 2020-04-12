@@ -50,18 +50,18 @@ class Question(db.Model):
 	__tablename__ = 'questions'
 
 	id = db.Column(db.Integer, primary_key=True)
-	text = db.Column(db.String(80), nullable=False)
+	text = db.Column(db.String(200), nullable=False)
 	id_code = db.Column(db.String(80), nullable=False)
 	has_image = db.Column(db.Boolean(), nullable=False)
 	has_subquestion = db.Column(db.Boolean(), nullable=False)
-	attr_subject = db.Column(db.String(80), nullable=False)
+	attr_subject = db.Column(db.String(20), nullable=False)
 	attr_season = db.Column(db.String(5), nullable=False)
 	attr_year = db.Column(db.String(10), nullable=False)
 	attr_paper = db.Column(db.String(5), nullable=False)
 	attr_question = db.Column(db.String(5), nullable=False)
 	attr_maxMark = db.Column(db.String(5), nullable=False)
 	attr_chapter = db.Column(db.String(5), nullable=False)
-	attr_difficulty = db.Column(db.String(5), nullable=False)
+	attr_difficulty = db.Column(db.String(10), nullable=False)
 
 	def __init__(self, text, id_code, has_image, has_subquestion):
 		if re.search(r'(?:-(\w+)){1}', id_code).group(1) == 'AddMat':
@@ -79,13 +79,13 @@ class Question(db.Model):
 		else:
 			difficulty = 'Difficult'
 
-		self.attr_subject = subject
-		self.attr_difficulty = difficulty
-		self.attr_season = season
 		self.text = text
 		self.id_code = id_code
 		self.has_image = has_image
 		self.has_subquestion = has_subquestion
+		self.attr_subject = subject
+		self.attr_difficulty = difficulty
+		self.attr_season = season
 		self.attr_year = '20{}'.format(id_code[1:3])
 		self.attr_paper = re.search(r'(?:-(\w+)){2}', id_code).group(1)
 		self.attr_question = re.search(r'(?:-(\w+)){3}', id_code).group(1)
@@ -108,6 +108,10 @@ class Question(db.Model):
 		"attr_chapter": self.attr_chapter,
 		"attr_difficulty": self.attr_difficulty
 		}
+	def get_all_mark(self):
+		marks = []
+		marks.extend(Mark.query.filter_by(id_code=self.id_code).all())
+		return marks
 
 class Sub_Question(db.Model):
 
@@ -118,20 +122,54 @@ class Sub_Question(db.Model):
 	id_code = db.Column(db.String(40), nullable=False)
 	has_image = db.Column(db.Boolean(), nullable=False)
 	main_question_id = db.Column(db.Integer, nullable=False)
-	sub_question_number = db.Column(db.Integer, nullable=False)
+	attr_subject = db.Column(db.String(20), nullable=False)
+	attr_season = db.Column(db.String(5), nullable=False)
+	attr_year = db.Column(db.String(10), nullable=False)
+	attr_paper = db.Column(db.String(5), nullable=False)
+	attr_question = db.Column(db.String(5), nullable=False)
+	attr_subQuestion = db.Column(db.String(5), nullable=False)
+	attr_maxMark = db.Column(db.String(5), nullable=False)
+	attr_chapter = db.Column(db.String(5), nullable=False)
+	attr_difficulty = db.Column(db.String(10), nullable=False)
 
-	def __init__(self, text, id_code, has_image, main_question_id, sub_question_number):
+	def __init__(self, text, id_code, has_image, main_question_id):
+		if re.search(r'(?:-(\w+)){1}', id_code).group(1) == 'AddMat':
+			subject = 'Additional Mathematics'
+		if id_code[:1] == 'm':
+			season = 'March'
+		elif id_code[:1] == 's':
+			season = 'May-June'
+		else:
+			season = 'November'
+		if re.search(r'(?:-(\w+)){7}', id_code).group(1) == 'E':
+			difficulty = 'Easy'
+		elif re.search(r'(?:-(\w+)){7}', id_code).group(1) == 'M':
+			difficulty = 'Medium'
+		else:
+			difficulty = 'Difficult'
 		self.text = text
+		self.id_code = id_code
 		self.has_image = has_image
 		self.main_question_id = main_question_id
-		self.id_code = id_code
-		self.sub_question_number = sub_question_number
+		self.attr_subject = subject
+		self.attr_difficulty = difficulty
+		self.attr_season = season
+		self.attr_year = '20{}'.format(id_code[1:3])
+		self.attr_paper = re.search(r'(?:-(\w+)){2}', id_code).group(1)
+		self.attr_question = re.search(r'(?:-(\w+)){3}', id_code).group(1)
+		self.attr_subQuestion = re.search(r'(?:-(\w+)){4}', id_code).group(1)
+		self.attr_maxMark= re.search(r'(?:-(\w+)){5}', id_code).group(1)
+		self.attr_chapter = re.search(r'(?:-(\w+)){6}', id_code).group(1)
 
 	def get_image_path(self):
 		return get_image(self.id_code, "sub_questions")
 
 	def get_main_question(self):
 		return Question.query.filter_by(id=self.main_question_id).first()
+	def get_all_mark(self):
+		marks = []
+		marks.extend(Mark.query.filter_by(id_code=self.id_code).all())
+		return marks
 
 class Mark(db.Model):
 
@@ -140,19 +178,33 @@ class Mark(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	text = db.Column(db.String(80), nullable=False)
 	id_code = db.Column(db.String(40), nullable=False)
+	question_id = db.Column(db.Integer, nullable=False)
 	mark = db.Column(db.String(10), nullable=False)
-	question_id = db.Column(db.String(40), nullable=False)
+	has_image = db.Column(db.Boolean(), nullable=False)
 	order = db.Column(db.Integer, nullable=False)
-	for_sub_question = db.Column(db.Boolean(), nullable=False)
+	attr_subQuestion = db.Column(db.String(5), nullable=False)
 
 
-	def __init__(self, text, mark, id_code, question_id, order, for_sub_question):
+	def __init__(self, text, mark, id_code, order, has_image):
 		self.text = text
 		self.mark = mark
-		self.question_id = question_id
 		self.order = order
 		self.id_code = id_code
-		self.for_sub_question = for_sub_question
+		self.has_image = has_image
+		attr_subQuestion = re.search(r'(?:-(\w+)){4}', id_code).group(1)
+		self.attr_subQuestion = attr_subQuestion
+
+		if int(attr_subQuestion) == 0:
+			self.question_id = Question.query.filter_by(id_code=id_code).first().id
+		else:
+			self.question_id = Sub_Question.query.filter_by(id_code=id_code).first().id
+
+	def get_maxMark(self):
+		pattern = r'(?<=[A-Z]){1,2}[0-9](?:\s|$)'
+		totalmark = 0
+		for i in re.findall(pattern, self.mark):
+			totalmark = totalmark + int(i)
+		return totalmark
 
 
 db.create_all()

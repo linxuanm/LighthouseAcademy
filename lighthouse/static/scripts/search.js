@@ -308,5 +308,14 @@
 		}
 	})
 
+	//Generate Paper Trigger
+	$("#generate_selected_questions").on("click", function(){
+		var selected_questions = JSON.parse(Cookies.get("selected_questions"))
+		var selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
+		if (selected_questions.length !== 0 || selected_sub_questions.length !== 0) {
+			window.location.replace("preview_paper")
+		}
+	})
+
 	
 })(jQuery);

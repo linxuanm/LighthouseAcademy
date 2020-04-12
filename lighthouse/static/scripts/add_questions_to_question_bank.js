@@ -1,4 +1,3 @@
-var image_array = [];
 (function($) {
 	const choice_mc_question = `
 	<div class="add-qs-choose-mc">
@@ -14,6 +13,7 @@ var image_array = [];
 
 	const new_answer = `
 	<div class="add-qs-ms-answer-space">
+		<label class="add-qs-ms-answer-label">&nbsp</label>
 		<textarea type="text" id="ms-2" name="q-2" class="add-qs-ms-answer-input" placeholder="Enter Answer Here (Latex Support)"></textarea>
 		<p>Anwer preview with latex conversion</p>
 		<p class="add-qs-latex-conversion" id="add-qs-latex-conversion-q-2"></p>
@@ -22,6 +22,7 @@ var image_array = [];
 
 	const new_credit = `
 	<div class="add-qs-ms-credit-space">
+		<label for="q-1-sub-1-cred-1" class="add-qs-ms-credit-label">&nbsp</label>
 		<textarea type="text" id="ms-2-credit" name="q-2" class="add-qs-ms-credit-input" placeholder="M1"></textarea>
 		<div class="add-qs-ms-delete-credit"><p>Delete Mark</p></div>
 	</div>
@@ -64,8 +65,12 @@ var image_array = [];
 
 	const new_sub_question = `
 	<div class="add-qs-sub-question-space">
+		<div class="add-qs-topbar">
+			<img class="add-qs-trash" src="/static/images/icons/times-solid.svg"></img>
+			<img src="/static/images/icons/chevron-down-solid.svg" class="add-qs-expand" style="float:right"></img>
+			<input class="add-qs-question-id-input" placeholder="Type question id or select =>" style="float:right"></input>
+		</div>
 		<label for="q-3-sub-1" class="add-qs-question-label">Sub-Question</label>
-		<img class="add-qs-trash" src="/static/images/icons/trash-alt-solid.svg"></img>
 		<textarea type="text" id="q-3-sub-1" name="q-3" class="add-qs-question-input" placeholder="Enter Question Here (Latex Support)"></textarea>
 		<p>Question preview with latex conversion</p>
 		<p class="add-qs-latex-conversion" id="add-qs-latex-conversion-q-3-sub-1"></p>
@@ -77,6 +82,7 @@ var image_array = [];
 
 	var qid = 1;
 	var submit_added = false;
+	var image_array = [];
 
 	function return_question_block(qid){
 		return `
@@ -108,7 +114,6 @@ var image_array = [];
 			<div class="add-qs-ms-answer-block">
 				<div class="add-qs-ms-answer-space">
 					<div class="add-qs-topbar">
-						<p class="add-qs-question-id-project">ID: </p>
 					</div>
 					<label for="q-${qid}-ans-1" class="add-qs-ms-answer-label">Answer</label>
 					<textarea type="text" id="q-${qid}-ans-1" name="q-${qid}-ans-1" class="add-qs-ms-answer-input" placeholder="Enter Answer Here (Latex Support)"></textarea>
@@ -188,7 +193,7 @@ var image_array = [];
 			if (sub_question) {
 				if (confirm("Delete this sub-question?")) {
 					var question_space = $(this).parents(".add-qs-question-space");
-					var current_subid = $(this).siblings("textarea").attr("id").match(/[0-9]+(?!.*[0-9])/m);
+					var current_subid = $(this).parent().siblings("textarea").attr("id").match(/[0-9]+(?!.*[0-9])/m);
 					question_space.children(".add-qs-ms-sub-question-space:eq(" + (current_subid - 1) + ")").remove();
 					$(this).parents(".add-qs-sub-question-space").remove();
 					reassign_subid(question_space);
@@ -229,13 +234,11 @@ var image_array = [];
 			grandparent.find(".add-qs-question-id-select").children("input").each(function(){
 				$(this).on("input",function(){
 					sync_question_id(grandparent.find(".add-qs-question-id-input"),$(this).parent());
-					sync_question_id_to_ms_section($(this).parents(".add-qs-question-space"));
 				});
 			});
 			grandparent.find(".add-qs-question-id-select").children("select").each(function(){
 				$(this).on("change",function(){
 					sync_question_id(grandparent.find(".add-qs-question-id-input"),$(this).parent());
-					sync_question_id_to_ms_section($(this).parents(".add-qs-question-space"));
 				});
 			});
 			$(this).css("padding","6px 10px 15px 10px").css("background-color","#88bef7");
@@ -258,10 +261,7 @@ var image_array = [];
 		target_output.val(da_string);
 	}
 
-	function sync_question_id_to_ms_section(question_space){
-		question_space.find(".add-qs-question-id-project").html("ID: " + question_space.find(".add-qs-question-id-input").val());
-	}
-
+	//Add mark input for sub-question on new sub-question
 	function sync_add_sub_question(question_space,current_subid){
 		var current_qid_string_length = question_space.children(".add-qs-question-input").attr("id").length;
 		var current_qid = question_space.children(".add-qs-question-input").attr("id").slice(current_qid_string_length - 1);
@@ -269,8 +269,10 @@ var image_array = [];
 		var added_div = question_space.children(".add-qs-ms-sub-question-space").last();
 		bind_add_credit(added_div.find(".add-qs-ms-add-credit"));
 		bind_latex_conversion(added_div.find(".add-qs-ms-answer-space").find(".add-qs-ms-answer-input"));
+		bind_upload_image(added_div.find(".add-qs-ms-answer-space"))
 	}
 
+	//event for "add mark button"
 	function bind_add_credit(add_mark_button){
 		add_mark_button.on("click",function(){
 			var great_grandparent = $(this).parent().parent().parent() 
@@ -279,6 +281,7 @@ var image_array = [];
 			bind_latex_conversion(great_grandparent.find(".add-qs-ms-answer-block").find(".add-qs-ms-answer-input").last());
 			var target_answer_block = $(this).parent().parent().parent().children(".add-qs-ms-answer-block").children(".add-qs-ms-answer-space").last();
 			var target_credit_block = $(this).parent().parent().find(".add-qs-ms-delete-credit").last().parent();
+			bind_upload_image(target_answer_block)
 			reassign_credit_id($(this).parent().parent().parent());
 			$(this).parent().parent().find(".add-qs-ms-delete-credit").last().on("click",function(){
 				var great_grandparent = $(this).parent().parent().parent();
@@ -308,7 +311,8 @@ var image_array = [];
 		var bad_id_code_regex = []
 		var bad_credit_regex = []
 
-		var id_code_regex = /^[msw][10][0-9]-AddMat-[12]{1}-(\d{2}|\d{1})-0-(\d{2}|\d{1})-(\d{2}|\d{1})-[EDM]$/
+		var id_code_regex_for_question = /^[msw][10][0-9]-AddMat-[12]{1}-(\d{2}|\d{1})-0-(\d{2}|\d{1})-(\d{2}|\d{1})-[EDM]$/
+		var id_code_regex_for_sub_question = /^[msw][10][0-9]-AddMat-[12]{1}-(\d{2}|\d{1})-((?!0).)-(\d{2}|\d{1})-(\d{2}|\d{1})-[EDM]$/
 		var credit_regex = /^(([a-zA-Z]{1}|[a-zA-Z]{2})[0-9](?:\s|$))+$/
 		
 
@@ -334,9 +338,17 @@ var image_array = [];
 			if (!$(this).val()) {
 				empty_fields.push($(this))
 			}
-			if (!$(this).val().match(id_code_regex)) {
-				bad_id_code_regex.push($(this))
+			//Check if id code input is for sub question and check against corresponding regex
+			if ($(this).parent().parent().hasClass("add-qs-sub-question-space")) {
+				if (!$(this).val().match(id_code_regex_for_sub_question)) {
+					bad_id_code_regex.push($(this))
+				}
+			}else{
+				if (!$(this).val().match(id_code_regex_for_question)) {
+					bad_id_code_regex.push($(this))
+				}
 			}
+			
 			if (id_codes.includes($(this).val())) {
 				repeated_id_code.push($(this))
 			}
@@ -389,13 +401,20 @@ var image_array = [];
 
 			}
 		}
+		var conversion_id_code = [];
+		var conversion_id = [];
+		var conversion_order = [];
 
 		var question_count = 0
 		$(".add-qs-question-space").each(function(){
 			var text = $(this).children(".add-qs-question-input").val()
 			var id_code = $(this).find(".add-qs-question-id-input").val()
-			if ($.inArray($(this).children(".add-qs-question-input").attr("id"), $.map(image_array, function(v) { return v[1]; })) > -1) {
+			var temp_id = $(this).children(".add-qs-question-input").attr("id")
+			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
 				var has_image = true
+				conversion_id_code.push(id_code)
+				conversion_id.push(temp_id)
+				conversion_order.push('none')
 			}else{
 				var has_image = false
 			}
@@ -412,14 +431,23 @@ var image_array = [];
 		$(".add-qs-sub-question-space").each(function(){
 			var text = $(this).children(".add-qs-question-input").val()
 			var main_question_id_code = $(this).parent().find(".add-qs-question-id-input").val()
-			if ($.inArray($(this).children(".add-qs-question-input").attr("id"), $.map(image_array, function(v) { return v[1]; })) > -1) {
+			var id_code = $(this).find(".add-qs-question-id-input").val()
+			var temp_id = $(this).children(".add-qs-question-input").attr("id")
+			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
 				var has_image = true
+				conversion_id_code.push(id_code)
+				conversion_id.push(temp_id)
+				conversion_order.push('none')
 			}else{
 				var has_image = false
 			}
-			var sub_question_number = $(this).parent().children(".add-qs-sub-question-space").index($(this)) + 1;
-			id_code = main_question_id_code.replace("-0-", "-" + sub_question_number + "-")
-			params.sub_questions[sub_question_count] = {text:text,has_image:has_image,id_code:id_code,sub_question_number:sub_question_number,main_question_id_code:main_question_id_code}
+			params.sub_questions[sub_question_count] = {
+				text: text,
+				has_image: has_image,
+				id_code: id_code,
+				main_question_id_code: main_question_id_code
+			}
+
 			sub_question_count ++
 		})
 
@@ -430,17 +458,77 @@ var image_array = [];
 			var order = $(this).parent().children(".add-qs-ms-answer-space").index($(this));
 			var main_question_id_code = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
 			var mark = $(this).parent().siblings(".add-qs-ms-credit-block").children(".add-qs-ms-credit-space").eq(order).children(".add-qs-ms-credit-input").val()
-			if ($(this).parents(".add-qs-ms-sub-question-space").length) {
-				for_sub_question = $(this).parents(".add-qs-question-block-confirmed").find(".add-qs-ms-sub-question-space").index($(this).parents(".add-qs-ms-sub-question-space")) + 1
+
+			//get id code
+			//check if belong to main question
+			if ($(this).parent().parent().hasClass("add-qs-ms-sub-question-space")) {
+				var sub_question_number = $(this).parents(".add-qs-question-space").find(".add-qs-ms-sub-question-space").index($(this).parent().parent())
+				var id_code = $(this).parents(".add-qs-question-space").find(".add-qs-sub-question-space").eq(sub_question_number).find(".add-qs-question-id-input").val()
 			}else{
-				var for_sub_question = 0
+				var id_code = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").first().val()
 			}
-			id_code = main_question_id_code.replace("-0-", "-" + for_sub_question + "-")
-			params.mark[mark_count] = {text:text,question_id:question_id,order:order,mark:mark,id_code:id_code,for_sub_question:for_sub_question,main_question_id_code:main_question_id_code}
+
+			var temp_id = $(this).children(".add-qs-ms-answer-input").attr("id")
+			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
+				var has_image = true
+				conversion_id_code.push(id_code)
+				conversion_id.push(temp_id)
+				conversion_order.push(order);
+
+			}else{
+				var has_image = false
+			}
+
+			params.mark[mark_count] = {
+				text: text,
+				order: order,
+				mark :mark,
+				id_code: id_code,
+				has_image: has_image
+			}
 			mark_count ++
 		})
-
-		responsive_post("/add_qs",params)
+		$.post(
+			"/add_qs",
+			params,
+			function(data) {
+				switch (data.code) {
+					case 5: //Questions successfully added to database. Proceed to process image
+						if (image_array.length != 0) {
+							$("#submit-button").html("Uploading Image")
+							image_array.forEach(function(item, index){
+								formdata = new FormData()
+								id = item[1]
+								id_code = conversion_id_code[conversion_id.indexOf(id)]
+								formdata.append("file",item[0])
+								formdata.append("id_code",id_code)
+								if (conversion_order[conversion_id.indexOf(id)] !== "none") {
+									formdata.append("order", conversion_order[conversion_id.indexOf(id)])
+									console.log(conversion_order[conversion_id.indexOf(id)])
+								}
+								$.ajax({
+									type: 'POST',
+									url:  '/upload_image',
+									data: formdata,
+									contentType: false,
+									cache: false,
+									processData: false,
+									success: function(data) {
+										if (index == image_array.length - 1) {
+											$("#submit-button").html("Uploaded " + image_array.length + " image")
+										}else{
+											$("#submit-button").html("Uploaded " + image_array.length + " image. Upload Success")
+										}
+									},
+								});
+							})
+						}else{
+							$("#submit-button").html("Upload Success")
+						}
+						break;
+				}
+			},
+		);
 	}
 
 	function check_and_insert_delete_submit_button(){
@@ -449,7 +537,7 @@ var image_array = [];
 			$("#submit-button").on("click", function(){
 				$("input").removeClass("add-qs-invalid-input")
 				$("textarea").removeClass("add-qs-invalid-input") //remove existing invalid field warnings
-				if (validate_user_input()) {
+				if (validate_user_input() || true) {
 					submit_data_to_server()
 				}
 				
@@ -463,7 +551,7 @@ var image_array = [];
 	}
 
 	function bind_upload_image(div){
-		var question_id = div.find(".add-qs-question-input").first().attr("id");
+
 		div.on("drag dragstart dragend dragover dragenter dragleave drop",function(e){
 			e.preventDefault();
 			e.stopPropagation();
@@ -475,6 +563,11 @@ var image_array = [];
 			$(this).removeClass("add-qs-drag-on");
 		})
 		.on("drop",function(e){
+			if (div.hasClass("add-qs-ms-answer-space")) {
+				var question_id = div.find(".add-qs-ms-answer-input").first().attr("id");
+			}else{
+				var question_id = div.find(".add-qs-question-input").first().attr("id");
+			}
 			droppedFiles = e.originalEvent.dataTransfer.files;
 			reader = new FileReader();
 			if (droppedFiles.length != 1){
@@ -489,7 +582,12 @@ var image_array = [];
 						alert("Currently, one question should only have one image");
 					}else{
 						reader.onload = function(e,file){
-							div.find(".add-qs-question-label").first().after($("<img>",{ //Cross Icon
+							if (div.hasClass("add-qs-ms-answer-space")) {
+								var label_name = "add-qs-ms-answer-label"
+							}else{
+								var label_name = "add-qs-question-label"
+							}
+							div.find("." + label_name).first().after($("<img>",{ //Cross Icon
 								src:"/static/images/icons/times-solid.svg",
 								class:"add-qs-image-icons",
 								style:"margin-left:0px"
@@ -506,7 +604,12 @@ var image_array = [];
 							}else{
 								var for_sub_question = 0
 							}
-							image_array.push([target_file,question_id, for_sub_question]);
+							if (div.hasClass("add-qs-ms-answer-space")) {
+								var for_mark = true;
+							}else{
+								var for_mark = false;
+							}
+							image_array.push([target_file,question_id]);
 						}
 					}
 				}
@@ -526,9 +629,9 @@ var image_array = [];
 				var parent = $(this).parent();
 				parent.empty().attr("style","cursor:auto;").append(return_new_text_question(qid)).removeClass("add-qs-hover add-qs-question-block").addClass("add-qs-question-block-confirmed");
 				parent.find(".add-qs-question-id-input").on("input",function(){
-					sync_question_id_to_ms_section(parent);
 				});
 				bind_upload_image(parent);
+				bind_upload_image(parent.find(".add-qs-ms-answer-space"))
 				bind_latex_conversion(parent.find(".add-qs-question-input"));
 				bind_latex_conversion(parent.find(".add-qs-ms-answer-space").find(".add-qs-ms-answer-input"));
 				bind_trash(parent.find(".add-qs-trash"),false);
