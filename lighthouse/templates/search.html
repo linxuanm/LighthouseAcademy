@@ -112,6 +112,7 @@
 					<p>Max Mark: <span>{{ i.attr_maxMark }}</span></p>
 					<p>Chapter: <span>{{ i.attr_chapter }}</span></p>
 					<p>Difficulty: <span>{{ i.attr_difficulty }}</span></p>
+					<p>Time Zone: <span>{{ i.attr_timeZone }}</span></p>
 				</div>
 				<div class="search-question-image">
 					<p>Question Image:</p>
@@ -130,6 +131,7 @@
 					<p>Max Mark: <span>{{ i.attr_maxMark }}</span></p>
 					<p>Chapter: <span>{{ i.attr_chapter }}</span></p>
 					<p>Difficulty: <span>{{ i.attr_difficulty }}</span></p>
+					<p>Time Zone: <span>{{ i.attr_timeZone }}</span></p>
 				</div>
 
 				{% endif %}
@@ -143,7 +145,11 @@
 						<div class="search-question-sub-question-box" style="margin-left: 3px; width: 92%">
 							<p class="search-question-text-view" style="margin-top: 20px">{{ j.text }} </p>
 							<div class="search-sub-question-details">
-								<p>Sub Question #<span>{{ j.sub_question_number }}</span></p>
+								<p>Sub Question # <span>{{ j.attr_subQuestion }}</span></p>
+								<p>Question ID: <span>{{ j.id_code }}</span></p>
+								<p>Max Mark: <span>{{ j.attr_maxMark }}</span></p>
+								<p>Chapter: <span>{{ j.attr_chapter }}</span></p>
+								<p>Difficulty: <span>{{ j.attr_difficulty }}</span></p>
 							</div>
 							{% if j.has_image %}
 							<div class="search-question-image">

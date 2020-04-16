@@ -310,10 +310,6 @@
 		var repeated_id_code = []
 		var bad_id_code_regex = []
 		var bad_credit_regex = []
-
-		var id_code_regex_for_question = /^[msw][10][0-9]-AddMat-[12]{1}-(\d{2}|\d{1})-0-(\d{2}|\d{1})-(\d{2}|\d{1})-[EDM]$/
-		var id_code_regex_for_sub_question = /^[msw][10][0-9]-AddMat-[12]{1}-(\d{2}|\d{1})-((?!0).)-(\d{2}|\d{1})-(\d{2}|\d{1})-[EDM]$/
-		var credit_regex = /^(([a-zA-Z]{1}|[a-zA-Z]{2})[0-9](?:\s|$))+$/
 		
 
 		$(".add-qs-question-input").each(function(){
@@ -330,7 +326,7 @@
 			if (!$(this).val()) {
 				empty_fields.push($(this))
 			}
-			if (!$(this).val().match(credit_regex)) {
+			if (!$(this).val().match(CREDIT_REGEX)) {
 				bad_credit_regex.push($(this))
 			}
 		})
@@ -340,11 +336,11 @@
 			}
 			//Check if id code input is for sub question and check against corresponding regex
 			if ($(this).parent().parent().hasClass("add-qs-sub-question-space")) {
-				if (!$(this).val().match(id_code_regex_for_sub_question)) {
+				if (!$(this).val().match(ID_CODE_REGEX_FOR_SUB_QUESTION)) {
 					bad_id_code_regex.push($(this))
 				}
 			}else{
-				if (!$(this).val().match(id_code_regex_for_question)) {
+				if (!$(this).val().match(ID_CODE_REGEX_FOR_QUESTION)) {
 					bad_id_code_regex.push($(this))
 				}
 			}
@@ -391,6 +387,7 @@
 	}
 
 	function submit_data_to_server(){
+
 		var params = {
 			questions:{
 			},
@@ -401,9 +398,7 @@
 
 			}
 		}
-		var conversion_id_code = [];
-		var conversion_id = [];
-		var conversion_order = [];
+		var temp_id_references = [] //id_code, temp_id, order (if is mark)
 
 		var question_count = 0
 		$(".add-qs-question-space").each(function(){
@@ -412,9 +407,7 @@
 			var temp_id = $(this).children(".add-qs-question-input").attr("id")
 			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
 				var has_image = true
-				conversion_id_code.push(id_code)
-				conversion_id.push(temp_id)
-				conversion_order.push('none')
+				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": "none"})
 			}else{
 				var has_image = false
 			}
@@ -423,7 +416,12 @@
 			}else{
 				var has_subquestion = false
 			}
-			params.questions[question_count] = {text:text,has_image:has_image,has_subquestion:has_subquestion,id_code:id_code}
+			params.questions[question_count] = {
+				text: text,
+				has_image: has_image,
+				has_subquestion: has_subquestion,
+				id_code: id_code
+			}
 			question_count ++
 		})
 
@@ -435,9 +433,7 @@
 			var temp_id = $(this).children(".add-qs-question-input").attr("id")
 			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
 				var has_image = true
-				conversion_id_code.push(id_code)
-				conversion_id.push(temp_id)
-				conversion_order.push('none')
+				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": "none"})
 			}else{
 				var has_image = false
 			}
@@ -447,7 +443,6 @@
 				id_code: id_code,
 				main_question_id_code: main_question_id_code
 			}
-
 			sub_question_count ++
 		})
 
@@ -471,10 +466,7 @@
 			var temp_id = $(this).children(".add-qs-ms-answer-input").attr("id")
 			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
 				var has_image = true
-				conversion_id_code.push(id_code)
-				conversion_id.push(temp_id)
-				conversion_order.push(order);
-
+				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": order})
 			}else{
 				var has_image = false
 			}
@@ -488,47 +480,48 @@
 			}
 			mark_count ++
 		})
-		$.post(
-			"/add_qs",
-			params,
-			function(data) {
-				switch (data.code) {
-					case 5: //Questions successfully added to database. Proceed to process image
-						if (image_array.length != 0) {
-							$("#submit-button").html("Uploading Image")
-							image_array.forEach(function(item, index){
-								formdata = new FormData()
-								id = item[1]
-								id_code = conversion_id_code[conversion_id.indexOf(id)]
-								formdata.append("file",item[0])
-								formdata.append("id_code",id_code)
-								if (conversion_order[conversion_id.indexOf(id)] !== "none") {
-									formdata.append("order", conversion_order[conversion_id.indexOf(id)])
-									console.log(conversion_order[conversion_id.indexOf(id)])
-								}
-								$.ajax({
-									type: 'POST',
-									url:  '/upload_image',
-									data: formdata,
-									contentType: false,
-									cache: false,
-									processData: false,
-									success: function(data) {
-										if (index == image_array.length - 1) {
-											$("#submit-button").html("Uploaded " + image_array.length + " image")
-										}else{
-											$("#submit-button").html("Uploaded " + image_array.length + " image. Upload Success")
-										}
-									},
-								});
-							})
-						}else{
+
+		formdata = new FormData()
+		if (image_array.length != 0) {
+			$("#submit-button").html("Uploading Image")
+			var files = [],
+				id_codes = [],
+				orders = []
+			image_array.forEach(function(item, index){
+				var current_id_reference = temp_id_references.filter(function(reference){return reference.temp_id == item[1]})[0]
+				formdata.append("files", item[0])
+				id_codes.push(current_id_reference.id_code)
+				orders.push(current_id_reference.order)
+			})
+			formdata.append("id_codes", id_codes)
+			formdata.append("orders", orders)
+		}else{
+			formdata.append("has_no_image", true)
+		}
+		$.ajax({
+			type: 'POST',
+			url:  '/upload_image',
+			data: formdata,
+			contentType: false,
+			cache: false,
+			processData: false,
+			success: function(data){
+				if (data.code == 1) {
+					$.post("/add_qs",params,
+					function(data) {
+						handle_server_response(data)
+						if (data.code == 5) {
 							$("#submit-button").html("Upload Success")
 						}
-						break;
+					},
+				);
 				}
 			},
-		);
+			error: function(response, exception){
+				$("#submit-button").html("Error! Please Contact the Lighthouse Team")
+			}
+		})
+		
 	}
 
 	function check_and_insert_delete_submit_button(){
@@ -537,7 +530,8 @@
 			$("#submit-button").on("click", function(){
 				$("input").removeClass("add-qs-invalid-input")
 				$("textarea").removeClass("add-qs-invalid-input") //remove existing invalid field warnings
-				if (validate_user_input() || true) {
+				
+				if (validate_user_input()) {
 					submit_data_to_server()
 				}
 				
