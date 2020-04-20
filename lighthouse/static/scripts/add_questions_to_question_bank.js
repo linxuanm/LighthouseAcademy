@@ -188,6 +188,7 @@
 		});
 	}
 
+	// Delete main question or sub question
 	function bind_trash(trashicon,sub_question){
 		trashicon.on("click",function(){
 			if (sub_question) {
@@ -261,7 +262,26 @@
 		target_output.val(da_string);
 	}
 
-	//Add mark input for sub-question on new sub-question
+	// Sync answer space height with credit(mark) space height
+	function bind_sync_answer_and_mark_div_height(){
+		$(".add-qs-ms-answer-input").each(function(){
+			var current_answer_space = $(this).parents(".add-qs-ms-answer-space")
+			var current_index = $(this).parents(".add-qs-ms-answer-block").find(".add-qs-ms-answer-space").index(current_answer_space)
+			var current_credit_space = $(this).parents(".add-qs-ms-answer-block").siblings(".add-qs-ms-credit-block").find(".add-qs-ms-credit-space:eq(" + current_index + ")")
+			console.log(current_credit_space)
+			current_credit_space.css("height", current_answer_space.css("height"))
+		})
+		$(".add-qs-ms-answer-input").on("input", function(){
+			var current_answer_space = $(this).parents(".add-qs-ms-answer-space")
+			var current_index = $(this).parents(".add-qs-ms-answer-block").find(".add-qs-ms-answer-space").index(current_answer_space)
+			var current_credit_space = $(this).parents(".add-qs-ms-answer-block").siblings(".add-qs-ms-credit-block").find(".add-qs-ms-credit-space:eq(" + current_index + ")")
+			console.log(current_credit_space)
+			current_credit_space.css("height", current_answer_space.css("height"))
+		})
+	
+	}
+
+	// Add mark input for sub-question on new sub-question
 	function sync_add_sub_question(question_space,current_subid){
 		var current_qid_string_length = question_space.children(".add-qs-question-input").attr("id").length;
 		var current_qid = question_space.children(".add-qs-question-input").attr("id").slice(current_qid_string_length - 1);
@@ -270,25 +290,27 @@
 		bind_add_credit(added_div.find(".add-qs-ms-add-credit"));
 		bind_latex_conversion(added_div.find(".add-qs-ms-answer-space").find(".add-qs-ms-answer-input"));
 		bind_upload_image(added_div.find(".add-qs-ms-answer-space"))
+		bind_sync_answer_and_mark_div_height()
 	}
 
-	//event for "add mark button"
+	// event for "add mark button"
 	function bind_add_credit(add_mark_button){
 		add_mark_button.on("click",function(){
 			var great_grandparent = $(this).parent().parent().parent() 
 			great_grandparent.find(".add-qs-ms-credit-block").first().append(new_credit);
 			great_grandparent.find(".add-qs-ms-answer-block").first().append(new_answer);
-			bind_latex_conversion(great_grandparent.find(".add-qs-ms-answer-block").find(".add-qs-ms-answer-input").last());
 			var target_answer_block = $(this).parent().parent().parent().children(".add-qs-ms-answer-block").children(".add-qs-ms-answer-space").last();
 			var target_credit_block = $(this).parent().parent().find(".add-qs-ms-delete-credit").last().parent();
 			bind_upload_image(target_answer_block)
 			reassign_credit_id($(this).parent().parent().parent());
+			bind_latex_conversion(great_grandparent.find(".add-qs-ms-answer-block").find(".add-qs-ms-answer-input").last());
 			$(this).parent().parent().find(".add-qs-ms-delete-credit").last().on("click",function(){
 				var great_grandparent = $(this).parent().parent().parent();
 				target_answer_block.remove();
 				target_credit_block.remove();
 				reassign_credit_id(great_grandparent);
 			});
+			bind_sync_answer_and_mark_div_height()
 		});
 	}
 
@@ -631,6 +653,7 @@
 				bind_trash(parent.find(".add-qs-trash"),false);
 				bind_add_credit(parent.find(".add-qs-ms-add-credit"),qid);
 				bind_expand_and_sync(parent.find(".add-qs-expand"));
+				bind_sync_answer_and_mark_div_height()
 				parent.find(".add-qs-add-sub-q").on("click",function(){
 					$(this).before(new_sub_question);
 					var added_div = $(this).parent().children(".add-qs-sub-question-space").last();
@@ -641,6 +664,7 @@
 					bind_latex_conversion(added_div.children("textarea"));
 					sync_add_sub_question($(this).parent(),current_subid);
 					bind_trash(added_div.find(".add-qs-trash"),true);
+					bind_sync_answer_and_mark_div_height()
 				});
 				qid++
 				$(".add-qs-question-block-confirmed").last().after(return_question_block(qid));
@@ -651,8 +675,6 @@
 	}
 	
 	bind_event_on_question(qid);
-
-	
 
 
 

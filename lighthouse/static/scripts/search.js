@@ -1,25 +1,44 @@
 (function($) {
 
-	//Showing and hiding sub quesitons
-	function bind_expand_sub_question(text){
-		text.off();
-		text.on("click",function(){
-			$(this).siblings(".search-question-sub-question-space").css("display","inline-block");
-			$(this).html("Collapse Sub Questions");
-			bind_collapse_sub_question($(this));
+	//Showing and hiding sub quesitons and mark scheme
+	function bind_show_sub_question(button){
+		button.off();
+		button.on("click",function(){
+			$(this).parents(".search-result-box").find(".search-question-sub-question-space").css("display","inline-block");
+			$(this).css("color", "#fff").css("background-color", "#5FACFE")
+			bind_hide_sub_question($(this));
 		});
 	}
 
-	function bind_collapse_sub_question(text){
-		text.off();
-		text.on("click",function(){
-			$(this).siblings(".search-question-sub-question-space").css("display","none");
-			$(this).html("Expand Sub Questions");
-			bind_expand_sub_question($(this));
+	function bind_hide_sub_question(button){
+		button.off();
+		button.on("click",function(){
+			$(this).parents(".search-result-box").find(".search-question-sub-question-space").css("display","none");
+			$(this).css("color", "#5FACFE").css("background-color", "#fff")
+			bind_show_sub_question($(this));
 		});
 	}
 
-	bind_expand_sub_question($(".search-question-extend-sub-question"));
+	function bind_show_mark_scheme(button){
+		button.off();
+		button.on("click",function(){
+			$(this).parents(".search-result-box").find(".mark-scheme").css("display","inline-block");
+			$(this).css("color", "#fff").css("background-color", "#f00")
+			bind_hide_mark_scheme($(this));
+		});
+	}
+
+	function bind_hide_mark_scheme(button){
+		button.off();
+		button.on("click",function(){
+			$(this).parents(".search-result-box").find(".mark-scheme").css("display","none");
+			$(this).css("color", "#f00").css("background-color", "#fff")
+			bind_show_mark_scheme($(this));
+		});
+	}
+
+	bind_show_sub_question($(".show-sub-question"));
+	bind_show_mark_scheme($(".show-mark-scheme"));
 
 	//Some insignificant line escaping
 	if ($(window).width() <= 600){
@@ -168,42 +187,45 @@
 	});
 
 
-	//Initinalize Cookies if not initialized
+	//Initialize Cookies if not initialized
 	if (typeof Cookies.get("selected_questions") === "undefined") {
 		Cookies.set("selected_questions", JSON.stringify([]))
 		Cookies.set("selected_sub_questions", JSON.stringify([]))
+		Cookies.set("selected_marks", JSON.stringify([]))
 	}
 
 	//Tick all question that is already selected when reloading the page
 	var selected_questions = JSON.parse(Cookies.get("selected_questions"))
 	var selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
+	var selected_marks = JSON.parse(Cookies.get("selected_marks"))
 	$("input").each(function(){
-		if (selected_questions.indexOf($(this).attr("id")) !== -1 || selected_sub_questions.indexOf($(this).attr("id")) !== -1) {
+		var id = $(this).attr("id")
+		if (selected_questions.indexOf(id) !== -1 || selected_sub_questions.indexOf(id) !== -1 || selected_marks.indexOf(id) !== -1) {
 			$(this).prop("checked", true)
 		}
 	})
 	
 
-	//update, show or, hide question count at the nav bar
-	function update_question_count(){
+	//Update, show or, hide question count at the nav bar
+	function update_selected_count(){
 		var selected_questions = JSON.parse(Cookies.get("selected_questions"))
 		var selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
-		if (selected_questions.length == 0 && selected_sub_questions.length == 0) {
+		var selected_marks = JSON.parse(Cookies.get("selected_marks"))
+		if (selected_questions.length == 0 && selected_sub_questions.length == 0 && selected_marks.length == 0) {
 			$(".nav-counting-hint").css("display", "none")
 		}else{
 			$(".nav-counting-hint").css("display", "block")
 			$("#question_count").html(selected_questions.length)
 			$("#sub_question_count").html(selected_sub_questions.length)
+			$("#mark_count").html(selected_marks.length)
 		}
 	}
 
-	update_question_count()
+	update_selected_count()
 
-	//Detect user ticking questions and add questions to array selected_questions and selected sub_questions
-
+	//Detect user ticking main questions and add/delete them to/from cookie
+	//Automatically check/uncheck the sub questions when checking/unchecking the main question
 	$(".search-result-space").children("input").on("click",function(){
-		//Event Listierns for main question checkbox
-		//Automatically check/uncheck the sub questions when checking/unchecking the main question
 		var selected_questions = JSON.parse(Cookies.get("selected_questions"))
 		var selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
 
@@ -230,22 +252,37 @@
 			})
 			Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
 		}
-		update_question_count()
+		update_selected_count()
 	})
 
+	//Detect user ticking sub questions and add/delete them to/from cookie
 	$(".search-question-sub-question-space").children("input").on("click", function(){
-		//Event Listener for sub questions checkbox
 		var selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
+		var id = $(this).attr("id")
 		if ($(this).is(":checked")) {
-			selected_sub_questions.push($(this).attr("id"))
+			selected_sub_questions.push(id)
 			Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
 		}else{
-			var id = $(this).attr("id")
 			selected_sub_questions = selected_sub_questions.filter(function(e){ return e !== id})
 			Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
 		}
-		update_question_count()
+		update_selected_count()
 	})
+
+	//Detect user ticking marks and add/delete them to/from cookie
+	$(".mark-scheme").find("input").on("click", function(){
+		var selected_marks = JSON.parse(Cookies.get("selected_marks"))
+		var id = $(this).attr("id")
+		if ($(this).is(":checked")) {
+			selected_marks.push(id)
+			Cookies.set("selected_marks", JSON.stringify(selected_marks))
+		}else{
+			selected_marks = selected_marks.filter(function(e){ return e !== id})
+			Cookies.set("selected_marks", JSON.stringify(selected_marks))
+		}
+		update_selected_count()
+	})
+
 
 	//Hide next page or prev page text according to current page
 	var current_page_num = parseInt($(".current-page").text())
@@ -279,32 +316,19 @@
 
 	//Delete Question from database
 	$("#delete_selected_questions").on("click", function(){
-		if (confirm("You are about to delete " + selected_questions.length + " questions and " + selected_sub_questions.length + " sub-questions")) {
-			var questions_to_delete = JSON.parse(Cookies.get("selected_questions"))
-			var sub_questions_to_delete = JSON.parse(Cookies.get("selected_sub_questions"))
-			to_delete = JSON.stringify({questions:questions_to_delete, sub_questions:sub_questions_to_delete})
-
+		if (confirm("Proceed to delete selected items?")) {
 			$.ajax({
-				url: "/delete_questions",
+				url: "/delete_selected",
 				type: "POST",
-				data: to_delete,
-				contentType: "application/json; charset=utf-8",
 				success: function(){
-					selected_questions = JSON.parse(Cookies.get("selected_questions"))
-					selected_sub_questions = JSON.parse(Cookies.get("selected_sub_questions"))
-					selected_questions.forEach(function(item, index){
-						selected_questions = selected_questions.filter(function(e){ return e !== item})
-					})
-					selected_sub_questions.forEach(function(item, index){
-						selected_sub_questions = selected_sub_questions.filter(function(e){ return e !== item})
-					})
-					Cookies.set("selected_questions", JSON.stringify(selected_questions))
-					Cookies.set("selected_sub_questions", JSON.stringify(selected_sub_questions))
+					//Reset the cookie since all selected items are delected
+					Cookies.set("selected_questions", JSON.stringify([]))
+					Cookies.set("selected_sub_questions", JSON.stringify([]))
+					Cookies.set("selected_marks", JSON.stringify([]))
 					window.location.replace(window.location.pathname + window.location.search)
 					alert("Success")
 				}
 			})
-			
 		}
 	})
 

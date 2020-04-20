@@ -8,7 +8,7 @@
 {% block headerContent %}
 <button class="nav-button" id="delete_selected_questions">Delete</button>
 <button class="nav-button" id="generate_selected_questions">Generate Paper</button>
-<p class="nav-counting-hint">Selected: <span id="question_count">7</span> Questions, <span id="sub_question_count">10</span> Sub-Questions</p>
+<p class="nav-counting-hint">Selected: <span id="question_count">X</span> Questions, <span id="sub_question_count">X</span> Sub-Questions,  <span id="mark_count">X</span> Marks</p>
 {% endblock %}
 
 {% block content %}
@@ -133,16 +133,37 @@
 					<p>Difficulty: <span>{{ i.attr_difficulty }}</span></p>
 					<p>Time Zone: <span>{{ i.attr_timeZone }}</span></p>
 				</div>
-
 				{% endif %}
+				<div class="question-operation">
+					<button class="show-mark-scheme">Mark Scheme</button>
+					{% if i.has_subquestion %}
+					<button class="show-sub-question">Sub Questions</button>
+					{% endif %}
+				</div>
+				<div class="mark-scheme">
+				{% for j in marks %}
+					{% if i.id_code == j.id_code %}
+					<div class="component-marks">
+						<div class="answer-container">
+							<div class="answer-text"><p>{{ j.text }}</p></div>
+							<div class="answer-credit"><p>{{ j.mark }}</p></div>
+							{% if j.has_image %}
+							<div class="answer-image"><img src="/static/images/icons/file-image-solid-blue.svg"></div>
+							{% endif %}
+						</div>
+						<input type="checkbox" id="{{ j.id }}" class="diy-checkbox">
+						<label for="{{ j.id }}"></label>
+					</div>
+					{% endif %}
+				{% endfor %}
+				</div>
 				{% if i.has_subquestion %}
-				<p class="search-question-extend-sub-question">Expand Sub-Questions</p>
 				{% for j in sub_questions %}
 					{% if i.id == j.main_question_id %}
-					<div class="search-question-sub-question-space" style="display: none;">
+					<div class="search-question-sub-question-space">
 						<input type="checkbox" id="{{ j.id_code }}" class="diy-checkbox">
 						<label for="{{ j.id_code }}"></label>
-						<div class="search-question-sub-question-box" style="margin-left: 3px; width: 92%">
+						<div class="search-question-sub-question-box" style="margin-left: 3px">
 							<p class="search-question-text-view" style="margin-top: 20px">{{ j.text }} </p>
 							<div class="search-sub-question-details">
 								<p>Sub Question # <span>{{ j.attr_subQuestion }}</span></p>
@@ -157,6 +178,23 @@
 								<img src="{{ j.get_image_path() }}"></img>
 							</div>
 							{% endif %}
+							<div class="mark-scheme">
+							{% for k in marks %}
+								{% if j.id_code == k.id_code %}
+								<div class="component-marks" style="flex-basis: 100%">
+									<div class="answer-container">
+										<div class="answer-text"><p>{{ k.text }}</p></div>
+										<div class="answer-credit"><p>{{ k.mark }}</p></div>
+										{% if k.has_image %}
+										<div class="answer-image"><img src="/static/images/icons/file-image-solid-blue.svg"></div>
+										{% endif %}
+									</div>
+									<input type="checkbox" id="{{ k.id }}" class="diy-checkbox">
+									<label for="{{ k.id }}"></label>
+								</div>
+								{% endif %}
+							{% endfor %}
+							</div>
 						</div>
 					</div>
 					{% endif %}

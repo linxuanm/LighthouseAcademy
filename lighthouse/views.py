@@ -3,7 +3,6 @@ from lighthouse.models import User, Question, Sub_Question, Mark
 from lighthouse.db_helper import (
     db_entry_exists,
     str2bool,
-    delete_questions_without_field
 )
 from lighthouse.interactions import (
     info,
@@ -11,8 +10,11 @@ from lighthouse.interactions import (
     verify_email_request,
     render_user_template,
     redirect_to,
+    http_error_response
+)
+from lighthouse.search_page_helper import(
+    delete_questions_without_field,
     search_error_response,
-    http_error_response,
 )
 from constants import (
     EMAIL_REGEX,
@@ -168,7 +170,6 @@ def upload_image():
     orders = request.form.get('orders').split(',')
 
     for file, id_code, order in zip(files, id_codes, orders):
-        print(order)
         if order != "none":
             file.save(os.path.join(dirname, "static/images/marks", str(id_code) + " " + order + ".png"))
         else:
@@ -226,12 +227,18 @@ def search():
     # Divide questions into sections according to current page. (Else the user has to load the entire database at one go)
     questions = questions[(current_page-1)*SEARCH_RESULT_MAX:(current_page-1)*SEARCH_RESULT_MAX+SEARCH_RESULT_MAX]
 
-
+    # Get sub-questions and marks
+    # Meanwhile check if no matching question can be found and return message
     sub_questions = []
+    marks = []
     if len(questions) != 0:
         for i in questions:
             if i.has_subquestion:
                 sub_questions.extend(Sub_Question.query.filter_by(main_question_id=i.id).all())
+            marks.extend(Mark.query.filter_by(id_code=i.id_code).all())
+        for i in sub_questions:
+            marks.extend(Mark.query.filter_by(id_code=i.id_code).all())
+
     else:
         return search_error_response("Lighthouse Cannot Find Any Question Text or ID That Contains Your Seach")
     
@@ -240,11 +247,12 @@ def search():
         title='Search for Question',
         questions=questions,
         sub_questions=sub_questions,
+        marks=marks,
         current_page=current_page,
         total_page=total_page
     )
 
-@app.route('/delete_questions', methods=['POST'])
+@app.route('/delete_selected', methods=['POST'])
 def delete_questions():
     # IMPORTANT TO DO:
     # CHECK IF USER REALLY HAS THE RIGHT TO DELETE QUESTION!!!
@@ -253,15 +261,25 @@ def delete_questions():
             selected_questions = json.loads(request.cookies.get('selected_questions'))
             for i in selected_questions:
                 question = Question.query.filter_by(id_code=i).first()
-                if question is not None:
+                if question is not None and question:
                     db.session.delete(question)
+
         if request.cookies.get('selected_sub_questions'):
-            selected_sub_questions = json.loads(request.cookies.get('selected_questions'))
+            selected_sub_questions = json.loads(request.cookies.get('selected_sub_questions'))
             for i in selected_sub_questions:
-                sub_question = Question.query.filter_by(id_code=i).first()
-                if sub_question is not None:
+                sub_question = Sub_Question.query.filter_by(id_code=i).first()
+                if sub_question is not None and sub_question:
                     db.session.delete(sub_question)
+
+        if request.cookies.get('selected_marks'):
+            selected_marks = json.loads(request.cookies.get('selected_marks'))
+            for i in selected_marks:
+                mark = Mark.query.filter_by(id=i).first()
+                if mark is not None and mark:
+                    db.session.delete(mark)
+
         db.session.commit()
+
         return jsonify({"code":3})
     return http_error_response(402)
 

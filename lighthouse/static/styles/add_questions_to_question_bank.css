@@ -214,7 +214,6 @@
 .add-qs-latex-conversion{
 	padding: 0px 0px 0px 10px;
 	color: #000 !important;
-	margin-bottom: 5px;
 	min-height: 30px;
 	background-color: #88bef7;
 	opacity: 0.7;
@@ -239,27 +238,6 @@
 	color: #5FACFE !important;
 	font-size: calc(10px + 0.5vw);
 	cursor: pointer;
-}
-
-.add-qs-sub-question-space{
-	width: calc(95% - 20px;);
-	min-height: 100px;
-	padding-left: calc(20px + 5%);
-	margin-top: 20px;
-}
-
-.add-qs-sub-question-topbar{
-	width: 100%;
-	height: 25px;
-	padding-top: 20px;
-}
-
-.add-qs-sub-question-topbar img{
-	float: right;
-	height: 17px;
-	width: 17px;
-	width: auto;
-	margin-top: 5px;
 }
 
 .add-qs-ms-boundary{
@@ -416,12 +394,41 @@
 	padding: 5px 0;
 }
 
-.add-qs-ms-sub-question-space{
-	width: calc(95% - 20px;);
-	min-height: 100px;
-	padding-left: calc(20px + 5%);
-}
-
 .add-qs-invalid-input{
 	border: 2px solid #f00 !important;
+}
+
+
+/* Start of media */
+
+.add-qs-sub-question-space{
+	min-height: 100px;
+	margin-top: 20px;
+}
+
+.add-qs-ms-sub-question-space{
+	min-height: 100px;
+}
+
+@media only screen and (max-width: 800px){
+	.add-qs-sub-question-space{
+		width: 100%;
+	}
+
+	.add-qs-ms-sub-question-space{
+		width: 100%;
+	}
+}
+
+@media only screen and (min-width: 800px){
+	.add-qs-sub-question-space{
+		width: calc(95% - 20px;);
+		padding-left: calc(20px + 5%);
+	}
+
+	.add-qs-ms-sub-question-space{
+		width: calc(95% - 20px;);
+		padding-left: calc(20px + 5%);
+	}
+
 }

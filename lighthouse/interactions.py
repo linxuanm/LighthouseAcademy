@@ -50,12 +50,3 @@ def http_error_response(error: int):
         ]
     )
 
-def search_error_response(message: str):
-    return render_template(
-        'search.html',
-        title='Search Error',
-        error_message=message
-        )
-
-
-
