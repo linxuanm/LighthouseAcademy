@@ -1,6 +1,24 @@
+# Database files
 *.db
+# Useless Pycaches
 __pycache__/*
 lighthouse/__pycache__/*
+
+# Virtual Environment
 venv/*
+
+# Images
 lighthouse/static/images/questions/*
 lighthouse/static/images/sub_questions/*
+lighthouse/static/images/marks/*
+
+# IDE configs
+.vscode/*
+
+# Node.js packages (for lint)
+node_modules
+package-lock.json
+package.json
+
+# eslint config file
+.eslintrc.json
