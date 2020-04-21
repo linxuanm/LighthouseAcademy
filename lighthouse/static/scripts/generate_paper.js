@@ -72,7 +72,7 @@
 		$(".generate-area").find("input").on("click", function () {
 			var id = $(this).attr("id")
 			if ($(this).is(":checked")) {
-				if ($(".generate-preview:contains('" + id + "')").length > 0) {} else {
+				if ($(".generate-preview:contains('" + id + "')").length <= 0) {
 					$(".generate-preview-id").append(return_thumbnail(id))
 					bind_delete_id_in_preview()
 				}

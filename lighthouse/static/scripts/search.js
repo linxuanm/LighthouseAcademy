@@ -41,7 +41,7 @@
 	bind_show_mark_scheme($(".show-mark-scheme"));
 
 	//Always show markscheme and subquestion event
-	$("#show_marks").on("click", function(){
+	$("#show_marks").on("click", function () {
 		if ($(this).is(":checked")) {
 			$(".mark-scheme").css("display", "flex").off();
 			$(".show-mark-scheme").css("color", "#fff").css("background-color", "#f00")
@@ -51,7 +51,7 @@
 			bind_show_mark_scheme($(".show-mark-scheme"));
 		}
 	})
-	$("#show_sub_questions").on("click", function(){
+	$("#show_sub_questions").on("click", function () {
 		if ($(this).is(":checked")) {
 			$(".search-question-sub-question-space").css("display", "flex").off();
 			$(".show-sub-question").css("color", "#fff").css("background-color", "#5FACFE")
@@ -105,13 +105,14 @@
 	function retain_checked_filter(filter_target) {
 		if (typeof getUrlVars()[filter_target] !== "undefined") {
 			$(".filter-" + filter_target).find($("input")).each(function () {
+				var id
 				if (filter_target == "paper") {
-					var id = $(this).attr("id").substr($(this).attr("id").length - 1)
+					id = $(this).attr("id").substr($(this).attr("id").length - 1)
 				} else if (filter_target == "chapter") {
-					pattern = /(?:-(\w+)){1}/
-					var id = $(this).attr("id").match(pattern)[1]
+					var pattern = /(?:-(\w+)){1}/
+					id = $(this).attr("id").match(pattern)[1]
 				} else {
-					var id = $(this).attr("id")
+					id = $(this).attr("id")
 				}
 				if (getUrlVars()[filter_target].split(",").indexOf(id) !== -1) {
 					$(this).prop("checked", true)
@@ -139,16 +140,17 @@
 		//Get current path with query string
 		console.log(getUrlVars())
 		if (window.location.search !== "") {
+			var target_url
 			if (typeof getUrlVars()["search"] !== "undefined") {
-				var target_url = window.location.pathname + "?search=" + getUrlVars()["search"] + "&"
+				target_url = window.location.pathname + "?search=" + getUrlVars()["search"] + "&"
 			} else {
-				var target_url = window.location.pathname + "?"
+				target_url = window.location.pathname + "?"
 			}
 		} else {
-			var target_url = window.location.pathname + window.location.search + "?"
+			target_url = window.location.pathname + window.location.search + "?"
 		}
 
-		array_season = []
+		var array_season = []
 		$(".filter-season").children("input").each(function () {
 			if ($(this).is(":checked")) {
 				array_season.push($(this).attr("id"))
@@ -156,7 +158,7 @@
 		})
 		target_url = format_filter_url(array_season, "season", target_url)
 
-		array_paper = []
+		var array_paper = []
 		$(".filter-paper").children("input").each(function () {
 			if ($(this).is(":checked")) {
 				array_paper.push($(this).attr("id").substr($(this).attr("id").length - 1))
@@ -164,8 +166,8 @@
 		})
 		target_url = format_filter_url(array_paper, "paper", target_url)
 
-		pattern = /(?:-(\w+)){1}/
-		array_chapter = []
+		var pattern = /(?:-(\w+)){1}/
+		var array_chapter = []
 		$(".filter-chapter").children("input").each(function () {
 			if ($(this).is(":checked")) {
 				array_chapter.push($(this).attr("id").match(pattern)[1])
@@ -173,7 +175,7 @@
 		})
 		target_url = format_filter_url(array_chapter, "chapter", target_url)
 
-		array_difficulty = []
+		var array_difficulty = []
 		$(".filter-difficulty").children("input").each(function () {
 			if ($(this).is(":checked")) {
 				array_difficulty.push($(this).attr("id"))
@@ -269,7 +271,6 @@
 			})
 			Cookies.set("selected_questions", JSON.stringify(selected_questions))
 
-			accumulated_target = []
 			$(this).parent().find(".search-question-sub-question-space").children("input").each(function () {
 				var id = $(this).attr("id")
 				selected_sub_questions = selected_sub_questions.filter(function (e) {
@@ -329,9 +330,10 @@
 	var page_query_string_pattern = /page=[0-9]+/
 	$(".page-next, .page-prev").on("click", function () {
 		if ($(this).hasClass("page-next")) {
-			var next_page_number = current_page_num + 1
+			var next_page_number
+			next_page_number = current_page_num + 1
 		} else {
-			var next_page_number = current_page_num - 1
+			next_page_number = current_page_num - 1
 		}
 		if (window.location.search !== "") {
 			var current_path = window.location.pathname + window.location.search

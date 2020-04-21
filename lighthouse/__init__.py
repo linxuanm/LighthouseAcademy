@@ -14,3 +14,5 @@ db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+from lighthouse import views  # noqa: F401,E402
