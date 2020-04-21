@@ -1,10 +1,13 @@
-function hyperlink(destination){
-	location.href = '/' + destination;
+function hyperlink(destination) {
+  location.href = '/' + destination;
 }
 
 MathJax = {
   tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
+    inlineMath: [
+      ['$', '$'],
+      ['\\(', '\\)']
+    ]
   },
   svg: {
     fontCache: 'global'

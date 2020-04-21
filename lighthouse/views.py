@@ -5,14 +5,13 @@ from lighthouse.db_helper import (
     str2bool,
 )
 from lighthouse.interactions import (
-    info,
     error,
     verify_email_request,
     render_user_template,
     redirect_to,
     http_error_response
 )
-from lighthouse.search_page_helper import(
+from lighthouse.search_page_helper import (
     delete_questions_without_field,
     search_error_response,
 )
@@ -89,7 +88,7 @@ def add_qs():
     data = request.form.to_dict()
     # Do a server side check on whether the sent data is valid
     for key, item in data.items():
-        if item == None or not item:
+        if item is None or not item:
             return error("Input field cannot be empty!")
         if "id_code" in key:
             if not re.match(QUESTION_ID_CODE_REGEX, item):
@@ -129,9 +128,9 @@ def add_qs():
 
             new_sub_questions.append(
                 Sub_Question(
-                    data.get(key), 
-                    data.get("{}[id_code]".format(series_id)), 
-                    str2bool(data.get("{}[has_image]".format(series_id))), 
+                    data.get(key),
+                    data.get("{}[id_code]".format(series_id)),
+                    str2bool(data.get("{}[has_image]".format(series_id))),
                     main_question_id
                 )
             )
@@ -145,9 +144,9 @@ def add_qs():
             series_id = key[0:-6]
             new_marks.append(
                 Mark(
-                    data.get(key), 
-                    data.get("{}[mark]".format(series_id)), 
-                    data.get("{}[id_code]".format(series_id)), 
+                    data.get(key),
+                    data.get("{}[mark]".format(series_id)),
+                    data.get("{}[id_code]".format(series_id)),
                     int(data.get("{}[order]".format(series_id))),
                     str2bool(data.get("{}[has_image]".format(series_id))),
                 )
@@ -157,7 +156,8 @@ def add_qs():
 
     db.session.commit()
 
-    return jsonify({'code':5})
+    return jsonify({'code': 5})
+
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():
@@ -180,7 +180,8 @@ def upload_image():
 
     return jsonify({"code": 1})
 
-@app.route('/search', methods=['GET','POST'])
+
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.args.get("search") == '' or not request.args.get("search"):
         questions = Question.query.all()
@@ -213,7 +214,7 @@ def search():
     if request.args.get("page"):
         current_page = request.args.get("page")
         if current_page.isdigit():
-            current_page=int(current_page)
+            current_page = int(current_page)
             if current_page <= 0:
                 return search_error_response("Page Number Cannot be 0 or Negative")
         else:
@@ -241,9 +242,9 @@ def search():
 
     else:
         return search_error_response("Lighthouse Cannot Find Any Question Text or ID That Contains Your Seach")
-    
+
     return render_template(
-        'search.html', 
+        'search.html',
         title='Search for Question',
         questions=questions,
         sub_questions=sub_questions,
@@ -251,6 +252,7 @@ def search():
         current_page=current_page,
         total_page=total_page
     )
+
 
 @app.route('/delete_selected', methods=['POST'])
 def delete_questions():
@@ -280,16 +282,18 @@ def delete_questions():
 
         db.session.commit()
 
-        return jsonify({"code":3})
+        return jsonify({"code": 3})
     return http_error_response(402)
+
 
 @app.route('/generate_paper', methods=['GET', 'POST'])
 def generate_paper():
 
     return render_template('generate_paper.html', title='Generate Papers')
 
+
 @app.route('/preview_paper', methods=['GET', 'POST'])
-def preivew_paper():
+def preview_paper():
     selected_questions = json.loads(request.cookies.get('selected_questions'))
     questions = []
     for i in selected_questions:
@@ -311,8 +315,8 @@ def preivew_paper():
     if len(questions) == 0 and len(sub_questions) == 0:
         return http_error_response(401)
     else:
-        return render_template('preview_paper.html', title='Preview Paper', questions=questions, sub_questions=sub_questions, total_mark=total_mark )
-    
+        return render_template('preview_paper.html', title='Preview Paper', questions=questions, sub_questions=sub_questions, total_mark=total_mark)
+
 
 @app.route('/user/<user_id>')
 def user(user_id):
@@ -322,7 +326,7 @@ def user(user_id):
         return redirect(url_for('home'))
 
     if user.is_verified():
-         return render_user_template(user_id)
+        return render_user_template(user_id)
 
     return verify_email_request(user.email)
 
@@ -334,7 +338,7 @@ def verify(verify_key):
         return redirect(url_for('home'))
 
     if user.is_verified():
-        return render_user_template(user_id)
+        return render_user_template(user.id)
 
     user.verify_key = ''
     db.session.commit()

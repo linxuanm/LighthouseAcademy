@@ -91,30 +91,30 @@ class Question(db.Model):
         self.attr_year = '20{}'.format(id_code[1:3])
         self.attr_paper = re.search(r'(?:-(\w+)){2}', id_code).group(1)
         self.attr_question = re.search(r'(?:-(\w+)){3}', id_code).group(1)
-        self.attr_maxMark= re.search(r'(?:-(\w+)){5}', id_code).group(1)
+        self.attr_maxMark = re.search(r'(?:-(\w+)){5}', id_code).group(1)
         self.attr_chapter = re.search(r'(?:-(\w+)){6}', id_code).group(1)
         self.attr_timeZone = re.search(r'(?:-(\w+)){8}', id_code).group(1)
-
-        
 
     def get_image_path(self):
         return get_image(self.id_code, "questions")
 
     def asdict(self):
         return {
-        "attr_subject":self.attr_subject, 
-        "attr_season":self.attr_season, 
-        "attr_year":self.attr_year, 
-        "attr_paper":self.attr_paper, 
-        "attr_question": self.attr_question, 
-        "attr_maxMark": self.attr_maxMark, 
-        "attr_chapter": self.attr_chapter,
-        "attr_difficulty": self.attr_difficulty
+            "attr_subject": self.attr_subject,
+            "attr_season": self.attr_season,
+            "attr_year": self.attr_year,
+            "attr_paper": self.attr_paper,
+            "attr_question": self.attr_question,
+            "attr_maxMark": self.attr_maxMark,
+            "attr_chapter": self.attr_chapter,
+            "attr_difficulty": self.attr_difficulty
         }
+
     def get_all_mark(self):
         marks = []
         marks.extend(Mark.query.filter_by(id_code=self.id_code).all())
         return marks
+
 
 class Sub_Question(db.Model):
 
@@ -162,7 +162,7 @@ class Sub_Question(db.Model):
         self.attr_paper = re.search(r'(?:-(\w+)){2}', id_code).group(1)
         self.attr_question = re.search(r'(?:-(\w+)){3}', id_code).group(1)
         self.attr_subQuestion = re.search(r'(?:-(\w+)){4}', id_code).group(1)
-        self.attr_maxMark= re.search(r'(?:-(\w+)){5}', id_code).group(1)
+        self.attr_maxMark = re.search(r'(?:-(\w+)){5}', id_code).group(1)
         self.attr_chapter = re.search(r'(?:-(\w+)){6}', id_code).group(1)
         self.attr_timeZone = re.search(r'(?:-(\w+)){8}', id_code).group(1)
 
@@ -174,6 +174,7 @@ class Sub_Question(db.Model):
 
     def get_all_mark(self):
         return Mark.query.filter_by(id_code=self.id_code).all()
+
 
 class Mark(db.Model):
 
@@ -187,7 +188,6 @@ class Mark(db.Model):
     has_image = db.Column(db.Boolean(), nullable=False)
     order = db.Column(db.Integer, nullable=False)
     attr_subQuestion = db.Column(db.String(5), nullable=False)
-
 
     def __init__(self, text, mark, id_code, order, has_image):
         self.text = text

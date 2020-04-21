@@ -1,4 +1,4 @@
-.sort-container{
+.sort-container {
 	display: flex;
 	height: 100%;
 	background-color: #424874;
@@ -11,21 +11,21 @@
 	padding-top: 20px;
 }
 
-.sort-container p{
+.sort-container p {
 	text-align: center;
 	font-size: 30px;
 	color: #fff;
 }
 
-.sort-container p span{
+.sort-container p span {
 	color: #84A9AC;
 }
 
-.sort-info{
+.sort-info {
 	margin: 7px 7px;
 }
 
-.sort-info p{
+.sort-info p {
 	text-align: right;
 	background-color: #424874;
 	color: #fff;
@@ -36,7 +36,7 @@
 	display: none;
 }
 
-.question-thumbnail{
+.question-thumbnail {
 	height: 40px;
 	width: 100%;
 	border-bottom: 1px solid #204051;
@@ -44,18 +44,18 @@
 	cursor: pointer;
 }
 
-.question-thumbnail:first-child{
+.question-thumbnail:first-child {
 	border-top: 1px solid #204051;
 }
 
-.question-thumbnail span{
+.question-thumbnail span {
 	line-height: 40px;
 	margin-left: 7px;
 	float: left;
 	color: #3B6978;
 }
 
-.question-thumbnail img{
+.question-thumbnail img {
 	float: right;
 	height: 16px;
 	width: 16px;
@@ -64,14 +64,14 @@
 	cursor: pointer;
 }
 
-.main{
+.main {
 	float: right;
 	width: calc(60% - 40px);
 	position: relative;
 	text-align: center;
 }
 
-.main button{
+.main button {
 	width: 150px;
 	height: 50px;
 	margin-top: 20px;
@@ -82,7 +82,7 @@
 	cursor: pointer;
 }
 
-.document{
+.document {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -91,8 +91,7 @@
 	transform: translate(-50%, -50%);
 }
 
-.document object{
+.document object {
 	height: 100%;
 	width: 100%;
 }
-

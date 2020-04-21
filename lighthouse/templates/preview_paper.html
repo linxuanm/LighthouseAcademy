@@ -13,24 +13,26 @@
 	</div>
 	<div class="sort-items">
 		{% for i in questions %}
-		<div class="question-thumbnail"><span>{{ i.id_code }}</span><img style="display: none" src="/static/images/icons/times-solid-blue.svg"></img></div>
+		<div class="question-thumbnail"><span>{{ i.id_code }}</span><img style="display: none"
+				src="/static/images/icons/times-solid-blue.svg"></img></div>
 		{% endfor %}
 		{% for i in sub_questions %}
-		<div class="question-thumbnail"><span>{{ i.id_code }}</span><img style="display: none" src="/static/images/icons/times-solid-blue.svg"></img></div>
+		<div class="question-thumbnail"><span>{{ i.id_code }}</span><img style="display: none"
+				src="/static/images/icons/times-solid-blue.svg"></img></div>
 		{% endfor %}
 	</div>
 </div>
 <div class="main">
 	<div class="document">
 		<object type="application/pdf" data="/static/images/test-question-image/0606_m19_qp_22.pdf">
-		<p>Insert your error message here, if the PDF cannot be displayed.</p>
-	</object>
-	<button class="">Download Question Paper</button>
-	<button class="">Download Mark Scheme</button>
-</div>
-{% endblock %}
+			<p>Insert your error message here, if the PDF cannot be displayed.</p>
+		</object>
+		<button class="">Download Question Paper</button>
+		<button class="">Download Mark Scheme</button>
+	</div>
+	{% endblock %}
 
-{% block scripts %}
-{{ super() }}
-<script type="text/javascript" src="/static/scripts/preview_paper.js"></script>
-{% endblock %}
+	{% block scripts %}
+	{{ super() }}
+	<script type="text/javascript" src="/static/scripts/preview_paper.js"></script>
+	{% endblock %}

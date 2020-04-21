@@ -172,7 +172,7 @@
 		var current_qid = question_space.children(".add-qs-question-input").attr('id').slice(2);
 		for (var i = 0; i <= question_space.children(".add-qs-sub-question-space").length - 1; i++) {
 			var id_target = question_space.children((".add-qs-sub-question-space:eq(" + i +")"));
-			var subid = "q-" + current_qid + "-sub-" + (i + 1)
+			var subid = "q-" + current_qid + "-sub-" + (i + 1);
 			id_target.children(".add-qs-question-label").attr("for",subid);
 			id_target.children(".add-qs-question-input").attr("id",subid).attr("name",subid);
 		}
@@ -265,19 +265,19 @@
 	// Sync answer space height with credit(mark) space height
 	function bind_sync_answer_and_mark_div_height(){
 		$(".add-qs-ms-answer-input").each(function(){
-			var current_answer_space = $(this).parents(".add-qs-ms-answer-space")
-			var current_index = $(this).parents(".add-qs-ms-answer-block").find(".add-qs-ms-answer-space").index(current_answer_space)
-			var current_credit_space = $(this).parents(".add-qs-ms-answer-block").siblings(".add-qs-ms-credit-block").find(".add-qs-ms-credit-space:eq(" + current_index + ")")
-			console.log(current_credit_space)
-			current_credit_space.css("height", current_answer_space.css("height"))
-		})
+			var current_answer_space = $(this).parents(".add-qs-ms-answer-space");
+			var current_index = $(this).parents(".add-qs-ms-answer-block").find(".add-qs-ms-answer-space").index(current_answer_space);
+			var current_credit_space = $(this).parents(".add-qs-ms-answer-block").siblings(".add-qs-ms-credit-block").find(".add-qs-ms-credit-space:eq(" + current_index + ")");
+			console.log(current_credit_space);
+			current_credit_space.css("height", current_answer_space.css("height"));
+		});
 		$(".add-qs-ms-answer-input").on("input", function(){
-			var current_answer_space = $(this).parents(".add-qs-ms-answer-space")
-			var current_index = $(this).parents(".add-qs-ms-answer-block").find(".add-qs-ms-answer-space").index(current_answer_space)
-			var current_credit_space = $(this).parents(".add-qs-ms-answer-block").siblings(".add-qs-ms-credit-block").find(".add-qs-ms-credit-space:eq(" + current_index + ")")
-			console.log(current_credit_space)
-			current_credit_space.css("height", current_answer_space.css("height"))
-		})
+			var current_answer_space = $(this).parents(".add-qs-ms-answer-space");
+			var current_index = $(this).parents(".add-qs-ms-answer-block").find(".add-qs-ms-answer-space").index(current_answer_space);
+			var current_credit_space = $(this).parents(".add-qs-ms-answer-block").siblings(".add-qs-ms-credit-block").find(".add-qs-ms-credit-space:eq(" + current_index + ")");
+			console.log(current_credit_space);
+			current_credit_space.css("height", current_answer_space.css("height"));
+		});
 	
 	}
 
@@ -289,19 +289,19 @@
 		var added_div = question_space.children(".add-qs-ms-sub-question-space").last();
 		bind_add_credit(added_div.find(".add-qs-ms-add-credit"));
 		bind_latex_conversion(added_div.find(".add-qs-ms-answer-space").find(".add-qs-ms-answer-input"));
-		bind_upload_image(added_div.find(".add-qs-ms-answer-space"))
-		bind_sync_answer_and_mark_div_height()
+		bind_upload_image(added_div.find(".add-qs-ms-answer-space"));
+		bind_sync_answer_and_mark_div_height();
 	}
 
 	// event for "add mark button"
 	function bind_add_credit(add_mark_button){
 		add_mark_button.on("click",function(){
-			var great_grandparent = $(this).parent().parent().parent() 
+			var great_grandparent = $(this).parent().parent().parent();
 			great_grandparent.find(".add-qs-ms-credit-block").first().append(new_credit);
 			great_grandparent.find(".add-qs-ms-answer-block").first().append(new_answer);
 			var target_answer_block = $(this).parent().parent().parent().children(".add-qs-ms-answer-block").children(".add-qs-ms-answer-space").last();
 			var target_credit_block = $(this).parent().parent().find(".add-qs-ms-delete-credit").last().parent();
-			bind_upload_image(target_answer_block)
+			bind_upload_image(target_answer_block);
 			reassign_credit_id($(this).parent().parent().parent());
 			bind_latex_conversion(great_grandparent.find(".add-qs-ms-answer-block").find(".add-qs-ms-answer-input").last());
 			$(this).parent().parent().find(".add-qs-ms-delete-credit").last().on("click",function(){
@@ -310,7 +310,7 @@
 				target_credit_block.remove();
 				reassign_credit_id(great_grandparent);
 			});
-			bind_sync_answer_and_mark_div_height()
+			bind_sync_answer_and_mark_div_height();
 		});
 	}
 
@@ -327,81 +327,81 @@
 
 	function validate_user_input(){
 
-		var empty_fields = []
-		var id_codes = []
-		var repeated_id_code = []
-		var bad_id_code_regex = []
-		var bad_credit_regex = []
+		var empty_fields = [];
+		var id_codes = [];
+		var repeated_id_code = [];
+		var bad_id_code_regex = [];
+		var bad_credit_regex = [];
 		
 
 		$(".add-qs-question-input").each(function(){
 			if (!$(this).val()) {
-				empty_fields.push($(this))
+				empty_fields.push($(this));
 			}
-		})
+		});
 		$(".add-qs-ms-answer-input").each(function(){
 			if (!$(this).val()) {
-				empty_fields.push($(this))
+				empty_fields.push($(this));
 			}
-		})
+		});
 		$(".add-qs-ms-credit-input").each(function(){
 			if (!$(this).val()) {
-				empty_fields.push($(this))
+				empty_fields.push($(this));
 			}
 			if (!$(this).val().match(CREDIT_REGEX)) {
-				bad_credit_regex.push($(this))
+				bad_credit_regex.push($(this));
 			}
-		})
+		});
 		$(".add-qs-question-id-input").each(function(){
 			if (!$(this).val()) {
-				empty_fields.push($(this))
+				empty_fields.push($(this));
 			}
 			//Check if id code input is for sub question and check against corresponding regex
 			if ($(this).parent().parent().hasClass("add-qs-sub-question-space")) {
 				if (!$(this).val().match(ID_CODE_REGEX_FOR_SUB_QUESTION)) {
-					bad_id_code_regex.push($(this))
+					bad_id_code_regex.push($(this));
 				}
 			}else{
 				if (!$(this).val().match(ID_CODE_REGEX_FOR_QUESTION)) {
-					bad_id_code_regex.push($(this))
+					bad_id_code_regex.push($(this));
 				}
 			}
 			
 			if (id_codes.includes($(this).val())) {
-				repeated_id_code.push($(this))
+				repeated_id_code.push($(this));
 			}
-			id_codes.push($(this).val())
-		})
+			id_codes.push($(this).val());
+		});
 
 		if (empty_fields.length != 0) {
 			empty_fields.forEach(function(item, index){
-				item.addClass("add-qs-invalid-input")
-			})
-			alert("Fields Cannot Be Empty")
-			return false
+				item.addClass("add-qs-invalid-input");
+			});
+			alert("Fields Cannot Be Empty");
+			return false;
 		}else{
 			if (repeated_id_code.length != 0) {
 				repeated_id_code.forEach(function(item, index){
-					item.addClass("add-qs-invalid-input")
-				})
-				alert("Question ID Must Be Unique")
-				return false
+					item.addClass("add-qs-invalid-input");
+				});
+				alert("Question ID Must Be Unique");
+				return false;
 			}else{
 				if (bad_id_code_regex.length != 0) {
 					bad_id_code_regex.forEach(function(item, index){
-						item.addClass("add-qs-invalid-input")
-					})
-					alert("Invalid Question ID Format")
-					return false
+						item.addClass("add-qs-invalid-input");
+					});
+					alert("Invalid Question ID Format");
+					return false;
 				}else{
 					if (bad_credit_regex.length != 0) {
 						bad_credit_regex.forEach(function(item, index){
-							item.addClass("add-qs-invalid-input")
-						})
-						alert("Invalid Marks Format")
-						return false
+							item.addClass("add-qs-invalid-input");
+						});
+						alert("Invalid Marks Format");
+						return false;
 					}else{
-						return true
+						return true;
 					}
 				}
 			}
@@ -419,78 +419,75 @@
 			mark:{
 
 			}
-		}
-		var temp_id_references = [] //id_code, temp_id, order (if is mark)
+		};
+		var temp_id_references = []; //id_code, temp_id, order (if is mark)
 
-		var question_count = 0
+		var question_count = 0;
 		$(".add-qs-question-space").each(function(){
-			var text = $(this).children(".add-qs-question-input").val()
-			var id_code = $(this).find(".add-qs-question-id-input").val()
-			var temp_id = $(this).children(".add-qs-question-input").attr("id")
+			var text = $(this).children(".add-qs-question-input").val();
+			var id_code = $(this).find(".add-qs-question-id-input").val();
+			var temp_id = $(this).children(".add-qs-question-input").attr("id");
+			var has_image = false;
+			var has_subquestion = false;
 			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
-				var has_image = true
-				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": "none"})
-			}else{
-				var has_image = false
+				has_image = true;
+				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": "none"});
 			}
 			if ($(this).children(".add-qs-sub-question-space").length) {
-				var has_subquestion = true
-			}else{
-				var has_subquestion = false
+				has_subquestion = true;
 			}
 			params.questions[question_count] = {
 				text: text,
 				has_image: has_image,
 				has_subquestion: has_subquestion,
 				id_code: id_code
-			}
-			question_count ++
-		})
+			};
+			question_count ++;
+		});
 
-		var sub_question_count = 0
+		var sub_question_count = 0;
 		$(".add-qs-sub-question-space").each(function(){
-			var text = $(this).children(".add-qs-question-input").val()
-			var main_question_id_code = $(this).parent().find(".add-qs-question-id-input").val()
-			var id_code = $(this).find(".add-qs-question-id-input").val()
-			var temp_id = $(this).children(".add-qs-question-input").attr("id")
+			var text = $(this).children(".add-qs-question-input").val();
+			var main_question_id_code = $(this).parent().find(".add-qs-question-id-input").val();
+			var id_code = $(this).find(".add-qs-question-id-input").val();
+			var temp_id = $(this).children(".add-qs-question-input").attr("id");
+			var has_image = false;
 			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
-				var has_image = true
-				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": "none"})
-			}else{
-				var has_image = false
+				has_image = true;
+				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": "none"});
 			}
 			params.sub_questions[sub_question_count] = {
 				text: text,
 				has_image: has_image,
 				id_code: id_code,
 				main_question_id_code: main_question_id_code
-			}
-			sub_question_count ++
-		})
+			};
+			sub_question_count ++;
+		});
 
-		var mark_count = 0
+		var mark_count = 0;
 		$(".add-qs-ms-answer-space").each(function(){
-			var text = $(this).children(".add-qs-ms-answer-input").val()
-			var question_id = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
+			var text = $(this).children(".add-qs-ms-answer-input").val();
+			var question_id = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val();
 			var order = $(this).parent().children(".add-qs-ms-answer-space").index($(this));
-			var main_question_id_code = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val()
-			var mark = $(this).parent().siblings(".add-qs-ms-credit-block").children(".add-qs-ms-credit-space").eq(order).children(".add-qs-ms-credit-input").val()
+			var main_question_id_code = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").val();
+			var mark = $(this).parent().siblings(".add-qs-ms-credit-block").children(".add-qs-ms-credit-space").eq(order).children(".add-qs-ms-credit-input").val();
 
 			//get id code
 			//check if belong to main question
+			var id_code;
 			if ($(this).parent().parent().hasClass("add-qs-ms-sub-question-space")) {
-				var sub_question_number = $(this).parents(".add-qs-question-space").find(".add-qs-ms-sub-question-space").index($(this).parent().parent())
-				var id_code = $(this).parents(".add-qs-question-space").find(".add-qs-sub-question-space").eq(sub_question_number).find(".add-qs-question-id-input").val()
+				var sub_question_number = $(this).parents(".add-qs-question-space").find(".add-qs-ms-sub-question-space").index($(this).parent().parent());
+				id_code = $(this).parents(".add-qs-question-space").find(".add-qs-sub-question-space").eq(sub_question_number).find(".add-qs-question-id-input").val();
 			}else{
-				var id_code = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").first().val()
+				id_code = $(this).parents(".add-qs-question-space").find(".add-qs-question-id-input").first().val();
 			}
 
-			var temp_id = $(this).children(".add-qs-ms-answer-input").attr("id")
+			var has_image = false;
+			var temp_id = $(this).children(".add-qs-ms-answer-input").attr("id");
 			if ($.inArray(temp_id, $.map(image_array, function(v) { return v[1]; })) > -1) {
-				var has_image = true
-				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": order})
-			}else{
-				var has_image = false
+				has_image = true;
+				temp_id_references.push({"id_code": id_code, "temp_id": temp_id, "order": order});
 			}
 
 			params.mark[mark_count] = {
@@ -499,26 +496,26 @@
 				mark :mark,
 				id_code: id_code,
 				has_image: has_image
-			}
-			mark_count ++
-		})
+			};
+			mark_count ++;
+		});
 
-		formdata = new FormData()
+		formdata = new FormData();
 		if (image_array.length != 0) {
-			$("#submit-button").html("Uploading Image")
+			$("#submit-button").html("Uploading Image");
 			var files = [],
 				id_codes = [],
-				orders = []
+				orders = [];
 			image_array.forEach(function(item, index){
-				var current_id_reference = temp_id_references.filter(function(reference){return reference.temp_id == item[1]})[0]
-				formdata.append("files", item[0])
-				id_codes.push(current_id_reference.id_code)
-				orders.push(current_id_reference.order)
-			})
-			formdata.append("id_codes", id_codes)
-			formdata.append("orders", orders)
+				var current_id_reference = temp_id_references.filter(function(reference){return reference.temp_id == item[1];})[0];
+				formdata.append("files", item[0]);
+				id_codes.push(current_id_reference.id_code);
+				orders.push(current_id_reference.order);
+			});
+			formdata.append("id_codes", id_codes);
+			formdata.append("orders", orders);
 		}else{
-			formdata.append("has_no_image", true)
+			formdata.append("has_no_image", true);
 		}
 		$.ajax({
 			type: 'POST',
@@ -531,18 +528,18 @@
 				if (data.code == 1) {
 					$.post("/add_qs",params,
 					function(data) {
-						handle_server_response(data)
+						handle_server_response(data);
 						if (data.code == 5) {
-							$("#submit-button").html("Upload Success")
+							$("#submit-button").html("Upload Success");
 						}
-					},
+					}
 				);
 				}
 			},
 			error: function(response, exception){
-				$("#submit-button").html("Error! Please Contact the Lighthouse Team")
+				$("#submit-button").html("Error! Please Contact the Lighthouse Team");
 			}
-		})
+		});
 		
 	}
 
@@ -550,19 +547,19 @@
 		if ($(".add-qs-question-space").length != 0 && submit_added == false) {
 			$(".add-qs-question-block-confirmed").last().parent().append(submit_button);
 			$("#submit-button").on("click", function(){
-				$("input").removeClass("add-qs-invalid-input")
-				$("textarea").removeClass("add-qs-invalid-input") //remove existing invalid field warnings
+				$("input").removeClass("add-qs-invalid-input");
+				$("textarea").removeClass("add-qs-invalid-input"); //remove existing invalid field warnings
 				
 				if (validate_user_input()) {
-					submit_data_to_server()
+					submit_data_to_server();
 				}
 				
-			})
-			submit_added = true
+			});
+			submit_added = true;
 		}
 		if ($(".add-qs-question-space").length == 0 && submit_added == true) {
 			$(".add-qs-submit-button").remove();
-			submit_added = false
+			submit_added = false;
 		}
 	}
 
@@ -579,10 +576,11 @@
 			$(this).removeClass("add-qs-drag-on");
 		})
 		.on("drop",function(e){
+			var question_id;
 			if (div.hasClass("add-qs-ms-answer-space")) {
-				var question_id = div.find(".add-qs-ms-answer-input").first().attr("id");
+				question_id = div.find(".add-qs-ms-answer-input").first().attr("id");
 			}else{
-				var question_id = div.find(".add-qs-question-input").first().attr("id");
+				question_id = div.find(".add-qs-question-input").first().attr("id");
 			}
 			droppedFiles = e.originalEvent.dataTransfer.files;
 			reader = new FileReader();
@@ -598,10 +596,11 @@
 						alert("Currently, one question should only have one image");
 					}else{
 						reader.onload = function(e,file){
+							var label_name;
 							if (div.hasClass("add-qs-ms-answer-space")) {
-								var label_name = "add-qs-ms-answer-label"
+								label_name = "add-qs-ms-answer-label";
 							}else{
-								var label_name = "add-qs-question-label"
+								label_name = "add-qs-question-label";
 							}
 							div.find("." + label_name).first().after($("<img>",{ //Cross Icon
 								src:"/static/images/icons/times-solid.svg",
@@ -615,22 +614,12 @@
 								src:"/static/images/icons/file-image-solid.svg",
 								class:"add-qs-image-icons",
 							}));
-							if (div.hasClass("add-qs-sub-question-space")) {
-								var for_sub_question = div.parents(".add-qs-question-space").find(".add-qs-sub-question-space").index(div) + 1
-							}else{
-								var for_sub_question = 0
-							}
-							if (div.hasClass("add-qs-ms-answer-space")) {
-								var for_mark = true;
-							}else{
-								var for_mark = false;
-							}
 							image_array.push([target_file,question_id]);
-						}
+						};
 					}
 				}
 			}
-		})
+		});
 	}
 
 	function bind_event_on_question(qid){
@@ -647,13 +636,13 @@
 				parent.find(".add-qs-question-id-input").on("input",function(){
 				});
 				bind_upload_image(parent);
-				bind_upload_image(parent.find(".add-qs-ms-answer-space"))
+				bind_upload_image(parent.find(".add-qs-ms-answer-space"));
 				bind_latex_conversion(parent.find(".add-qs-question-input"));
 				bind_latex_conversion(parent.find(".add-qs-ms-answer-space").find(".add-qs-ms-answer-input"));
 				bind_trash(parent.find(".add-qs-trash"),false);
 				bind_add_credit(parent.find(".add-qs-ms-add-credit"),qid);
 				bind_expand_and_sync(parent.find(".add-qs-expand"));
-				bind_sync_answer_and_mark_div_height()
+				bind_sync_answer_and_mark_div_height();
 				parent.find(".add-qs-add-sub-q").on("click",function(){
 					$(this).before(new_sub_question);
 					var added_div = $(this).parent().children(".add-qs-sub-question-space").last();
@@ -664,14 +653,14 @@
 					bind_latex_conversion(added_div.children("textarea"));
 					sync_add_sub_question($(this).parent(),current_subid);
 					bind_trash(added_div.find(".add-qs-trash"),true);
-					bind_sync_answer_and_mark_div_height()
+					bind_sync_answer_and_mark_div_height();
 				});
-				qid++
+				qid++;
 				$(".add-qs-question-block-confirmed").last().after(return_question_block(qid));
 				bind_event_on_question(qid);
 				check_and_insert_delete_submit_button();
 			});
-		})
+		});
 	}
 	
 	bind_event_on_question(qid);

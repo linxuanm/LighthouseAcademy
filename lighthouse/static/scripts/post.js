@@ -2,13 +2,13 @@ function responsive_post(url, params) {
 	$.post(
 		url,
 		params,
-		function(data) {
+		function (data) {
 			handle_server_response(data)
 		}
 	)
 }
 
-function handle_server_response(data){
+function handle_server_response(data) {
 	switch (data.code) {
 		case 0: // Does nothing.
 			break;

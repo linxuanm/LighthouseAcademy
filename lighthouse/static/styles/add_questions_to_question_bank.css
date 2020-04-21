@@ -422,12 +422,12 @@
 
 @media only screen and (min-width: 800px){
 	.add-qs-sub-question-space{
-		width: calc(95% - 20px;);
+		width: calc(95% - 20px);
 		padding-left: calc(20px + 5%);
 	}
 
 	.add-qs-ms-sub-question-space{
-		width: calc(95% - 20px;);
+		width: calc(95% - 20px);
 		padding-left: calc(20px + 5%);
 	}
 

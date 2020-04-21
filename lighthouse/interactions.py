@@ -49,4 +49,3 @@ def http_error_response(error: int):
             'Please contact the Lighthouse team.'
         ]
     )
-

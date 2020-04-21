@@ -7,6 +7,7 @@ def db_entry_exists(db, **kwargs):
     '''
     return db.query.filter_by(**kwargs).count()
 
+
 def str2bool(v):
     '''
     Turns "True" to true and "False" to false
