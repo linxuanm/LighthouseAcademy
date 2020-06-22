@@ -38,6 +38,17 @@ def verify_email_request(email):
     )
 
 
+def search_error_response(code: int, message: str):
+    return render_template(
+        'info.html',
+        title='Error: ' + str(error),
+        sections=[
+            'Your search was terminated for the reason below',
+            message
+        ]
+    )
+
+
 def http_error_response(error: int):
     return render_template(
         'info.html',

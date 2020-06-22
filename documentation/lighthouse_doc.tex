@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\usepackage[a4paper, total={5.5in, 9in}]{geometry}
+
+\usepackage{setspace}
+\doublespacing
+
+\usepackage{indentfirst}
+
+\begin{document}
+
+\title{Lighthouse Academy Documentation}
+\pagenumbering{gobble}
+\author{Johnny Ding}
+\maketitle
+\newpage
+
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+
+
+\section{Introduction}
+
+
+\subsection{Lighthouse Academy}
+
+Lighthouse Academy (later referred as Lighthouse) is a question bank website that supports categorization and search of questions and generation of papers. Currently, Lighthouse focuses on IGCSE additional math. The Lighthouse core members, which includes the developers and other important decision making personnel, plans to extend lighthouse to support other subjects in the future.
+
+\subsection{The Developers}
+
+I (Johnny Ding) am one of the developers and have written this document. I am merely a novice web developer who is willing to learn and build. David Ma, who is more experienced in developing in general, is the other developer. However, David can no longer support me in the development process of Lighthouse for various reasons. So, I am currently alone in the development of Lighthouse.
+
+\subsection{Purpose of This Documentation}
+
+At the start, writing such extensive documentation for a website seems to be a waste of effort. However, several reasons has convinced me and urged me to do so.
+
+Firstly, one of the main purposes of a documentation is for other developers to read. It is very likely that other developers will join the development process, and such documentation would help familiarize them with the structure of the website so that they do not have to go line by line to understand the bad code I have written.
+Secondly, the aim of this website makes it rather complex. Writing everything down helps myself (and potentially others) to be constantly aware of what I am doing. Critical planning and structuring sometimes can be done neither among the lines of code nor in my humble mind. Reliability, security, and scalability are all factors that need to be considered, and sometimes it is more organized to put them all down onto a single file.
+Lastly, writing documentations is (probably) an important skill of a developer. This documentation serves educational and learning purposes. It is also a better format to present the work I have done than simply showing other lines of code separated in countless files.
+
+
+\section{Basic Structure}
+
+
+\subsection{Frontend}
+
+The frontend of Lighthouse is a classical mix of HTML5, CSS, and JavaScript. No frontend development framework such as Bootstrap or React is used. I use JQuery with JavaScript to facilitate DOM manipulation and element selection. HTML files include Jinja2 code (statement, snippet... whatever) to support dynamic backend rendering.
+
+\subsection{Backend}
+
+Lighthouse uses the Python web micro-framework Flask. Jinja2 template permits dynamic rendering of HTML files. A SQL database is used to store and retrieve data.
+
+
+\section{Database Structure}
+
+
+
+
+\end{document}

@@ -6,15 +6,50 @@
 {% endblock %}
 
 {% block content %}
-<div class=add-qs-container>
-	<div class="add-qs-title">
+<div class=container>
+	<div class="title">
 		<h1>Add Questions to the Question Bank</h1>
 	</div>
-	<div class="add-qs-inputqs">
-		<div class="add-qs-question-block add-qs-hover" id="question-1">
-			<p>+</p>
+	<div class="inputqs">
+		<div class="question-block">
+			<div class="question-space">
+				<div class="topbar">
+					<input class="question-id-input" placeholder="Type in the question id" style="float:right"></input>
+				</div>
+				<label class="question-label">Question</label>
+				<textarea type="text" class="question-input" placeholder="Enter Question Here (Latex Support)"></textarea>
+				<p>Question preview with latex conversion</p>
+				<p class="latex-conversion"</p>
+				<div class="add-sub-q">
+					<p>+ Add sub-question</p>
+				</div>
+				<div class="ms-boundary"></div>
+				<div class="ms-title">
+					<p>Mark Scheme</p>
+				</div>
+				<div class="ms-answer-block">
+					<div class="ms-answer-space">
+						<div class="topbar">
+						</div>
+						<label class="ms-answer-label">Answer</label>
+						<textarea type="text" class="ms-answer-input" placeholder="Enter Answer Here (Latex Support)"></textarea>
+						<p>Answer preview with latex conversion</p>
+						<p class="latex-conversion"></p>
+					</div>
+				</div>
+				<div class="ms-credit-block">
+					<div class="ms-credit-space">
+						<div class="topbar">
+					</div>
+						<label class="ms-credit-label">Marks</label>
+						<textarea type="text" class="ms-credit-input" placeholder="M1"></textarea>
+						<div class="ms-add-credit"><p>Add Marks</p></div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
+	<button class="submit-button" id="submit-button">Submit</button>
 </div>
 {% endblock %}
 
